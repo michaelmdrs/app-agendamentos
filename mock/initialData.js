@@ -4,7 +4,10 @@ export const initialData = {
     name: 'Barbearia & Estilo Griffs',
     slug: 'barbeariagriffs',
     phone: '(11) 99999-8888',
-    address: 'Rua das Flores, 123 - Centro'
+    address: 'Rua das Flores, 123 - Centro',
+    logo_url: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=150&auto=format&fit=crop&q=80',
+    banner_url: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&auto=format&fit=crop&q=80',
+    primary_color: '#0284c7' // Cor principal personalizável (Hex)
   },
   resources: [
     { id: 'res-1', name: 'Carlos Barbeiro', active: true },

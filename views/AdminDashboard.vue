@@ -3,14 +3,23 @@
     <div class="max-w-4xl mx-auto space-y-6">
       
       <!-- Top Bar -->
-      <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+      <div class="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div>
           <h1 class="text-xl font-bold text-gray-800">Painel de Gestão - Agenda</h1>
           <p class="text-xs text-gray-500">Acompanhe os agendamentos em tempo real</p>
         </div>
-        <router-link to="/" class="text-xs bg-brand-50 text-brand-600 px-3 py-2 rounded-lg font-bold border border-brand-200">
-          Ver Visão do Cliente ↗
-        </router-link>
+
+        <div class="flex flex-wrap gap-2">
+          <router-link to="/admin" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+            Agendamentos
+          </router-link>
+          <router-link to="/admin/configuracao" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/configuracao' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+            Configuração
+          </router-link>
+          <router-link to="/" class="text-xs bg-brand-50 text-brand-600 px-3 py-2 rounded-lg font-bold border border-brand-200">
+            Ver Visão do Cliente ↗
+          </router-link>
+        </div>
       </div>
 
       <!-- Filtros e Ações -->

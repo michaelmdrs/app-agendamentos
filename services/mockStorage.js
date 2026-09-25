@@ -18,6 +18,15 @@ export const db = {
   getAppointments() {
     return this.get().appointments || []
   },
+  updateOrganization(nextOrganization) {
+    const data = this.get()
+    data.organization = {
+      ...data.organization,
+      ...nextOrganization
+    }
+    this.save(data)
+    return data.organization
+  },
   addAppointment(appointment) {
     const data = this.get()
     const newApp = {
