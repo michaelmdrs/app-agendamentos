@@ -18,6 +18,9 @@ export const db = {
   getAppointments() {
     return this.get().appointments || []
   },
+  getProfessionals() {
+    return this.get().professionals || []
+  },
   updateOrganization(nextOrganization) {
     const data = this.get()
     data.organization = {
@@ -26,6 +29,46 @@ export const db = {
     }
     this.save(data)
     return data.organization
+  },
+  addProfessional(professional) {
+    const data = this.get()
+    const newProfessional = {
+      id: 'prof-' + Date.now(),
+      active: true,
+      ...professional
+    }
+    data.professionals.push(newProfessional)
+    data.resources = data.professionals.map((item) => ({
+      id: item.id,
+      name: item.name,
+      active: item.active
+    }))
+    this.save(data)
+    return newProfessional
+  },
+  updateProfessional(id, payload) {
+    const data = this.get()
+    const professional = data.professionals.find(item => item.id === id)
+    if (!professional) return null
+
+    Object.assign(professional, payload)
+    data.resources = data.professionals.map((item) => ({
+      id: item.id,
+      name: item.name,
+      active: item.active
+    }))
+    this.save(data)
+    return professional
+  },
+  deleteProfessional(id) {
+    const data = this.get()
+    data.professionals = data.professionals.filter(item => item.id !== id)
+    data.resources = data.professionals.map((item) => ({
+      id: item.id,
+      name: item.name,
+      active: item.active
+    }))
+    this.save(data)
   },
   addAppointment(appointment) {
     const data = this.get()

@@ -13,9 +13,15 @@
           <router-link to="/admin" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
             Agendamentos
           </router-link>
+          <router-link to="/admin/profissionais" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/profissionais' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+            Profissionais
+          </router-link>
           <router-link to="/admin/configuracao" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/configuracao' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
             Configuração
           </router-link>
+          <button @click="logout" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-lg font-bold border border-red-200">
+            Sair
+          </button>
           <router-link to="/" class="text-xs bg-brand-50 text-brand-600 px-3 py-2 rounded-lg font-bold border border-brand-200">
             Ver Visão do Cliente ↗
           </router-link>
@@ -117,5 +123,10 @@ const statusBadge = (status) => {
     case 'completed': return 'bg-blue-100 text-blue-700'
     default: return 'bg-gray-100 text-gray-700'
   }
+}
+
+const logout = () => {
+  localStorage.removeItem('agendaflex_admin_session')
+  window.location.href = '/admin/login'
 }
 </script>

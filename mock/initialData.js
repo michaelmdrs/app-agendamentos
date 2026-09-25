@@ -1,4 +1,8 @@
 export const initialData = {
+  admin: {
+    email: 'admin@agendaflex.com',
+    password: 'admin123'
+  },
   organization: {
     id: 'org-1',
     name: 'Barbearia & Estilo Griffs',
@@ -7,8 +11,13 @@ export const initialData = {
     address: 'Rua das Flores, 123 - Centro',
     logo_url: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=150&auto=format&fit=crop&q=80',
     banner_url: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&auto=format&fit=crop&q=80',
-    primary_color: '#0284c7' // Cor principal personalizável (Hex)
+    primary_color: '#0284c7'
   },
+  professionals: [
+    { id: 'prof-1', name: 'Carlos Barbeiro', specialty: 'Barbeiro', phone: '(11) 98888-1111', active: true },
+    { id: 'prof-2', name: 'Lucas Especialista', specialty: 'Cortes e Estilo', phone: '(11) 98888-2222', active: true },
+    { id: 'prof-3', name: 'Qualquer Profissional', specialty: 'Atendimento Geral', phone: '(11) 98888-3333', active: true }
+  ],
   resources: [
     { id: 'res-1', name: 'Carlos Barbeiro', active: true },
     { id: 'res-2', name: 'Lucas Especialista', active: true },
