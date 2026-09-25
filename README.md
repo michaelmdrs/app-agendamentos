@@ -14,13 +14,13 @@ Fluxo mobile-first em 3 etapas: seleção de serviço, escolha de profissional e
 
 | Etapa 1 | Etapa 2 | Etapa 3 |
 | :---: | :---: | :---: |
-| ![Seleção de serviço](https://raw.githubusercontent.com/michaelmdrs/app-agendamentos/main/assets/img/tela-1.png) | ![Escolha de data e horário](https://raw.githubusercontent.com/michaelmdrs/app-agendamentos/main/assets/img/tela-2.png) | ![Confirmação do agendamento](https://raw.githubusercontent.com/michaelmdrs/app-agendamentos/main/assets/img/tela-3.png) |
+| ![Seleção de serviço](https://github.com/michaelmdrs/app-agendamentos/blob/main/assets/img/tela-1.png?raw=1) | ![Escolha de data e horário](https://github.com/michaelmdrs/app-agendamentos/blob/main/assets/img/tela-2.png?raw=1) | ![Confirmação do agendamento](https://github.com/michaelmdrs/app-agendamentos/blob/main/assets/img/tela-3.png?raw=1) |
 
 ### Painel do gestor
 
 Visualização dos agendamentos do dia com filtro por data, nome do cliente, serviço, profissional e status do atendimento.
 
-![Painel administrativo](https://raw.githubusercontent.com/michaelmdrs/app-agendamentos/main/assets/img/tela-6.png)
+![Painel administrativo](https://github.com/michaelmdrs/app-agendamentos/blob/main/assets/img/tela-6.png?raw=1)
 
 ---
 
