@@ -1,0 +1,23 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./views/**/*.{vue,js,ts,jsx,tsx}",
+    "./router/**/*.{vue,js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#f0f9ff',
+          200: '#bae6fd',
+          500: '#0284c7',
+          600: '#0369a1',
+          700: '#075985',
+        }
+      }
+    },
+  },
+  plugins: [],
+}
