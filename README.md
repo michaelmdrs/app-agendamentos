@@ -20,7 +20,7 @@ Fluxo mobile-first em 3 etapas: seleção de serviço, escolha de profissional e
 
 Visualização dos agendamentos do dia com filtro por data, nome do cliente, serviço, profissional e status do atendimento.
 
-![Painel administrativo](assets/img/tela-4.png)
+![Painel administrativo](assets/img/tela-6.png)
 
 ---
 
