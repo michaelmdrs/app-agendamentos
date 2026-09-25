@@ -11,14 +11,14 @@
 
 | 1. Seleção de Serviço & Profissional | 2. Escolha de Data & Hora | 3. Dados e Confirmação |
 | :---: | :---: | :---: |
-| ![Visão do Cliente - Serviços](https://via.placeholder.com/300x600.png?text=Passo+1+Serviços) | ![Visão do Cliente - Data e Hora](https://via.placeholder.com/300x600.png?text=Passo+2+Data+e+Hora) | ![Visão do Cliente - Confirmação](https://via.placeholder.com/300x600.png?text=Passo+3+Confirmação) |
+| ![Visão do Cliente - Serviços](assets/img/tela-1.png) | ![Visão do Cliente - Data e Hora](assets/img/tela-2.png) | ![Visão do Cliente - Confirmação](assets/img/tela-3.png) |
 
 ---
 
 ### 💻 Painel do Gestor / Admin (`/admin`)
 *Visualização em tempo real dos agendamentos do dia, controle de status (Confirmado, Concluído, Cancelado) e acompanhamento rápido.*
 
-![Painel Admin](https://via.placeholder.com/900x450.png?text=Painel+Admin+Gestao+de+Agendamentos)
+![Painel Admin](assets/img/tela-4.png)
 
 ---
 
