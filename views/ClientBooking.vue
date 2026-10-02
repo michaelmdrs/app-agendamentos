@@ -37,16 +37,40 @@
               <p class="font-semibold text-gray-900">{{ service.name }}</p>
               <p class="text-xs text-gray-500">{{ service.duration_minutes }} min</p>
             </div>
-            <span class="font-bold text-gray-900">R$ {{ service.price.toFixed(2) }}</span>
+            <span class="font-bold text-gray-900">R$ {{ Number(service.price).toFixed(2) }}</span>
           </div>
         </div>
       </div>
 
       <div v-if="selectedService">
         <h2 class="font-bold text-gray-800 mb-3">2. Profissional</h2>
-        <div class="grid grid-cols-2 gap-2">
-          <button v-for="res in resources" :key="res.id" @click="selectedResource = res" :class="['p-3 text-xs font-semibold border rounded-lg transition', selectedResource?.id === res.id ? 'bg-gray-900 text-white border-gray-900' : 'border-gray-200 text-gray-700']">
-            {{ res.name }}
+        <div v-if="filteredProfessionals.length === 0" class="text-xs text-gray-500 p-4 border rounded-xl bg-gray-50 text-center">
+          Nenhum profissional disponível para este serviço.
+        </div>
+        <div v-else class="grid grid-cols-2 gap-2">
+          <button
+            v-for="res in filteredProfessionals"
+            :key="res.id"
+            @click="selectedResource = res"
+            :class="[
+              'p-2.5 text-xs font-semibold border rounded-xl transition flex items-center gap-2 text-left',
+              selectedResource?.id === res.id
+                ? 'bg-gray-900 text-white border-gray-900 shadow'
+                : 'border-gray-200 text-gray-700 hover:bg-gray-50'
+            ]"
+          >
+            <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-gray-200 flex items-center justify-center font-bold text-xs">
+              <img v-if="res.avatar_url" :src="res.avatar_url" :alt="res.name" class="w-full h-full object-cover" />
+              <span v-else :class="selectedResource?.id === res.id ? 'text-gray-900' : 'text-gray-600'">
+                {{ res.name.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+            <div class="truncate">
+              <p class="font-bold truncate">{{ res.name }}</p>
+              <p :class="['text-[10px] truncate', selectedResource?.id === res.id ? 'text-gray-300' : 'text-gray-500']">
+                {{ res.specialty || 'Atendimento' }}
+              </p>
+            </div>
           </button>
         </div>
       </div>
@@ -201,9 +225,19 @@ watch([selectedResource, selectedDate], async ([res, date]) => {
   }
 })
 
+// Filtra profissionais disponíveis para o serviço selecionado
+const filteredProfessionals = computed(() => {
+  if (!selectedService.value) return resources.value.filter(p => p.active !== false)
+  return resources.value.filter(prof => {
+    if (prof.active === false) return false
+    if (!prof.service_ids || prof.service_ids.length === 0) return true
+    return prof.service_ids.includes(selectedService.value.id)
+  })
+})
+
 const loadData = async () => {
   org.value = await dataService.getOrganization()
-  services.value = await dataService.getServices(org.value?.id)
+  services.value = await dataService.getServices(org.value?.id, true)
   resources.value = await dataService.getProfessionals(org.value?.id)
 }
 

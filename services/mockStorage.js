@@ -70,6 +70,42 @@ export const db = {
     }))
     this.save(data)
   },
+  getServices() {
+    return this.get().services || []
+  },
+  addService(service) {
+    const data = this.get()
+    const newService = {
+      id: 'serv-' + Date.now(),
+      name: service.name,
+      description: service.description || '',
+      duration_minutes: Number(service.duration_minutes) || 30,
+      price: Number(service.price) || 0,
+      active: service.active ?? true
+    }
+    if (!data.services) data.services = []
+    data.services.push(newService)
+    this.save(data)
+    return newService
+  },
+  updateService(id, payload) {
+    const data = this.get()
+    const service = (data.services || []).find(item => item.id === id)
+    if (!service) return null
+
+    Object.assign(service, {
+      ...payload,
+      duration_minutes: payload.duration_minutes !== undefined ? Number(payload.duration_minutes) : service.duration_minutes,
+      price: payload.price !== undefined ? Number(payload.price) : service.price
+    })
+    this.save(data)
+    return service
+  },
+  deleteService(id) {
+    const data = this.get()
+    data.services = (data.services || []).filter(item => item.id !== id)
+    this.save(data)
+  },
   addAppointment(appointment) {
     const data = this.get()
     const newApp = {

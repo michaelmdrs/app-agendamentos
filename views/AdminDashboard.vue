@@ -18,13 +18,16 @@
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <router-link to="/admin" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+          <router-link to="/admin" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200']">
             Agendamentos
           </router-link>
-          <router-link to="/admin/profissionais" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/profissionais' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+          <router-link to="/admin/servicos" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/servicos' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200']">
+            Serviços
+          </router-link>
+          <router-link to="/admin/profissionais" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/profissionais' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200']">
             Profissionais
           </router-link>
-          <router-link to="/admin/configuracao" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/configuracao' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200']">
+          <router-link to="/admin/configuracao" :class="['text-xs px-3 py-2 rounded-lg font-bold border transition', $route.path === '/admin/configuracao' ? 'bg-brand-600 text-white border-brand-600' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200']">
             Configuração
           </router-link>
           <button @click="logout" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-lg font-bold border border-red-200">

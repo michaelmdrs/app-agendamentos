@@ -61,21 +61,96 @@ export const dataService = {
   },
 
   // Serviços
-  async getServices(orgId) {
+  async getServices(orgId, activeOnly = false) {
     if (!isSupabaseConfigured) {
-      return mockDb.get().services || []
+      const list = mockDb.getServices()
+      return activeOnly ? list.filter(s => s.active !== false) : list
     }
 
     try {
-      let query = supabase.from('services').select('*').eq('active', true)
+      let query = supabase.from('services').select('*')
       if (orgId) query = query.eq('organization_id', orgId)
+      if (activeOnly) query = query.eq('active', true)
 
-      const { data, error } = await query
+      const { data, error } = await query.order('created_at', { ascending: true })
       if (error) throw error
       return data || []
     } catch (err) {
       console.warn('Erro ao buscar serviços no Supabase:', err)
-      return mockDb.get().services || []
+      const list = mockDb.getServices()
+      return activeOnly ? list.filter(s => s.active !== false) : list
+    }
+  },
+
+  async addService(service, orgId) {
+    if (!isSupabaseConfigured) {
+      return mockDb.addService(service)
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .insert([{
+          organization_id: orgId || 'a0000000-0000-0000-0000-000000000001',
+          name: service.name,
+          description: service.description || '',
+          duration_minutes: Number(service.duration_minutes) || 30,
+          price: Number(service.price) || 0,
+          active: service.active ?? true
+        }])
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (err) {
+      console.warn('Erro ao adicionar serviço no Supabase:', err)
+      return mockDb.addService(service)
+    }
+  },
+
+  async updateService(id, payload) {
+    if (!isSupabaseConfigured) {
+      return mockDb.updateService(id, payload)
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .update({
+          name: payload.name,
+          description: payload.description,
+          duration_minutes: Number(payload.duration_minutes),
+          price: Number(payload.price),
+          active: payload.active
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (err) {
+      console.warn('Erro ao atualizar serviço no Supabase:', err)
+      return mockDb.updateService(id, payload)
+    }
+  },
+
+  async deleteService(id) {
+    if (!isSupabaseConfigured) {
+      return mockDb.deleteService(id)
+    }
+
+    try {
+      const { error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+    } catch (err) {
+      console.warn('Erro ao deletar serviço no Supabase:', err)
+      mockDb.deleteService(id)
     }
   },
 
@@ -111,6 +186,8 @@ export const dataService = {
           name: professional.name,
           specialty: professional.specialty,
           phone: professional.phone,
+          avatar_url: professional.avatar_url || null,
+          service_ids: professional.service_ids || null,
           active: professional.active ?? true
         }])
         .select()
@@ -130,14 +207,18 @@ export const dataService = {
     }
 
     try {
+      const updateData = {
+        name: payload.name,
+        specialty: payload.specialty,
+        phone: payload.phone,
+        active: payload.active
+      }
+      if (payload.avatar_url !== undefined) updateData.avatar_url = payload.avatar_url
+      if (payload.service_ids !== undefined) updateData.service_ids = payload.service_ids
+
       const { data, error } = await supabase
         .from('professionals')
-        .update({
-          name: payload.name,
-          specialty: payload.specialty,
-          phone: payload.phone,
-          active: payload.active
-        })
+        .update(updateData)
         .eq('id', id)
         .select()
         .single()
