@@ -62,6 +62,24 @@
               <input v-model="form.address" placeholder="Rua, Número, Bairro - Cidade" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500" />
             </div>
 
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Link da Agenda na Bio (Slug da URL) *
+              </label>
+              <div class="flex items-center">
+                <span class="bg-gray-100 border border-r-0 rounded-l-xl px-3 py-3 text-xs text-gray-500 font-mono">
+                  /
+                </span>
+                <input
+                  v-model="form.slug"
+                  placeholder="ex: barbeariagriffs"
+                  class="w-full p-3 border rounded-r-xl outline-none focus:ring-2 focus:ring-brand-500 font-mono text-sm"
+                  required
+                />
+              </div>
+              <p class="text-[11px] text-gray-400 mt-1">Este é o link que você coloca na bio do Instagram ou envia no WhatsApp para os clientes agendarem.</p>
+            </div>
+
             <!-- Upload Local de Logotipo -->
             <div class="p-3 border rounded-xl bg-gray-50/50 space-y-2">
               <div class="flex justify-between items-center">

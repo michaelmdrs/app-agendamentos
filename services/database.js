@@ -11,6 +11,37 @@ export const dataService = {
     return !isSupabaseConfigured
   },
 
+  // Controle do período de teste de 14 dias e assinatura
+  checkSubscription(org) {
+    if (!org) return { active: true, isTrial: true, daysRemaining: 14, expired: false }
+    
+    // Assinatura ativa paga
+    if (org.subscription_status === 'active') {
+      return { active: true, isTrial: false, daysRemaining: null, expired: false }
+    }
+
+    // Se o status for explicitamente expirado ou suspenso
+    if (org.subscription_status === 'expired' || org.subscription_status === 'suspended') {
+      return { active: false, isTrial: true, daysRemaining: 0, expired: true }
+    }
+
+    // Se tiver data de expiração gravada
+    if (org.trial_ends_at) {
+      const now = new Date()
+      const end = new Date(org.trial_ends_at)
+      const diffMs = end - now
+      const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+
+      if (daysRemaining <= 0) {
+        return { active: false, isTrial: true, daysRemaining: 0, expired: true }
+      }
+      return { active: true, isTrial: true, daysRemaining, expired: false }
+    }
+
+    // Caso não tenha data gravada ainda, considera trial ativo com 14 dias padrão
+    return { active: true, isTrial: true, daysRemaining: 14, expired: false }
+  },
+
   // Organização / Empresa
   async getOrganization(slug = 'barbeariagriffs') {
     if (!isSupabaseConfigured) {
@@ -42,6 +73,7 @@ export const dataService = {
         .from('organizations')
         .update({
           name: payload.name,
+          slug: payload.slug,
           phone: payload.phone,
           address: payload.address,
           logo_url: payload.logo_url,

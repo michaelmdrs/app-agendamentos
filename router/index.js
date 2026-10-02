@@ -13,7 +13,8 @@ const routes = [
   { path: '/admin', component: AdminDashboard },
   { path: '/admin/servicos', component: AdminServices },
   { path: '/admin/profissionais', component: AdminProfessionals },
-  { path: '/admin/configuracao', component: AdminCompanySettings }
+  { path: '/admin/configuracao', component: AdminCompanySettings },
+  { path: '/:slug', component: ClientBooking }
 ]
 
 export const router = createRouter({
