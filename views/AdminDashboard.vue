@@ -5,7 +5,15 @@
       <!-- Top Bar -->
       <div class="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div>
-          <h1 class="text-xl font-bold text-gray-800">Painel de Gestão - Agenda</h1>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold text-gray-800">Painel de Gestão - Agenda</h1>
+            <span v-if="isMock" class="text-[11px] bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full border border-amber-200">
+              Mock Local
+            </span>
+            <span v-else class="text-[11px] bg-green-100 text-green-800 font-semibold px-2 py-0.5 rounded-full border border-green-200">
+              PostgreSQL Conectado
+            </span>
+          </div>
           <p class="text-xs text-gray-500">Acompanhe os agendamentos em tempo real</p>
         </div>
 
@@ -86,18 +94,27 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { db } from '../services/mockStorage'
+import { dataService } from '../services/database'
 
-const filterDate = ref(new Date().toISOString().split('T')[0])
+const getLocalDate = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const filterDate = ref(getLocalDate())
 const appointments = ref([])
 const services = ref([])
 const resources = ref([])
+const isMock = ref(dataService.isUsingMock())
 
-const loadData = () => {
-  const data = db.get()
-  appointments.value = data.appointments
-  services.value = data.services
-  resources.value = data.resources
+const loadData = async () => {
+  const org = await dataService.getOrganization()
+  appointments.value = await dataService.getAppointments(org?.id)
+  services.value = await dataService.getServices(org?.id)
+  resources.value = await dataService.getProfessionals(org?.id)
 }
 
 onMounted(() => {
@@ -111,9 +128,9 @@ const filteredAppointments = computed(() => {
 const getServiceName = (id) => services.value.find(s => s.id === id)?.name || 'N/A'
 const getResourceName = (id) => resources.value.find(r => r.id === id)?.name || 'N/A'
 
-const changeStatus = (id, newStatus) => {
-  db.updateAppointmentStatus(id, newStatus)
-  loadData()
+const changeStatus = async (id, newStatus) => {
+  await dataService.updateAppointmentStatus(id, newStatus)
+  await loadData()
 }
 
 const statusBadge = (status) => {

@@ -99,9 +99,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { db } from '../services/mockStorage'
+import { dataService } from '../services/database'
 
 const form = ref({
+  id: '',
   name: '',
   phone: '',
   address: '',
@@ -123,23 +124,23 @@ const defaultBrand = {
   primary_color: '#0284c7'
 }
 
-const loadSettings = () => {
-  const data = db.get()
-  form.value = { ...defaultBrand, ...data.organization }
+const loadSettings = async () => {
+  const org = await dataService.getOrganization()
+  form.value = { ...defaultBrand, ...org }
 }
 
 onMounted(() => {
   loadSettings()
 })
 
-const saveSettings = () => {
-  db.updateOrganization(form.value)
+const saveSettings = async () => {
+  await dataService.updateOrganization(form.value)
   savedMessage.value = 'Configuração salva com sucesso!'
 }
 
-const resetForm = () => {
+const resetForm = async () => {
   form.value = { ...defaultBrand }
-  db.updateOrganization(form.value)
+  await dataService.updateOrganization(form.value)
   savedMessage.value = 'Valores restaurados para o padrão inicial.'
 }
 </script>

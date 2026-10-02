@@ -65,8 +65,22 @@
       <div v-if="selectedDate">
         <h2 class="font-bold text-gray-800 mb-2">Horários Disponíveis</h2>
         <div class="grid grid-cols-3 gap-2">
-          <button v-for="time in availableTimes" :key="time" @click="selectedTime = time" :class="['py-2.5 text-sm font-semibold border rounded-lg transition', selectedTime === time ? 'bg-brand-600 text-white border-brand-600' : 'border-gray-200 text-gray-700 hover:bg-gray-50']">
-            {{ time }}
+          <button
+            v-for="slot in computedTimeSlots"
+            :key="slot.time"
+            :disabled="slot.isBooked || slot.isPast"
+            @click="!slot.isBooked && !slot.isPast && (selectedTime = slot.time)"
+            :class="[
+              'py-2.5 text-sm font-semibold border rounded-lg transition relative',
+              slot.isBooked || slot.isPast
+                ? 'bg-gray-100 text-gray-300 border-gray-200 cursor-not-allowed line-through'
+                : selectedTime === slot.time
+                  ? 'bg-brand-600 text-white border-brand-600 shadow'
+                  : 'border-gray-200 text-gray-700 hover:bg-gray-50'
+            ]"
+          >
+            {{ slot.time }}
+            <span v-if="slot.isBooked" class="block text-[10px] text-red-400 font-normal">Ocupado</span>
           </button>
         </div>
       </div>
@@ -93,8 +107,8 @@
       </div>
 
       <div class="bg-gray-50 p-4 rounded-xl space-y-2 border text-sm text-gray-700">
-        <p><strong>Serviço:</strong> {{ selectedService.name }} (R$ {{ selectedService.price.toFixed(2) }})</p>
-        <p><strong>Profissional:</strong> {{ selectedResource.name }}</p>
+        <p><strong>Serviço:</strong> {{ selectedService?.name }} (R$ {{ selectedService?.price?.toFixed(2) }})</p>
+        <p><strong>Profissional:</strong> {{ selectedResource?.name }}</p>
         <p><strong>Data & Hora:</strong> {{ selectedDate }} às {{ selectedTime }}</p>
       </div>
 
@@ -109,26 +123,42 @@
     <div v-if="step === 4" class="p-6 text-center space-y-4 my-auto">
       <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
       <h2 class="text-2xl font-bold text-gray-900">Agendado com Sucesso!</h2>
-      <p class="text-gray-600 text-sm">Obrigado {{ clientName }}, seu horário foi reservado.</p>
-      <button @click="resetForm" class="w-full py-3 bg-gray-900 text-white font-bold rounded-xl mt-4">Novo Agendamento</button>
+      <p class="text-gray-600 text-sm">Obrigado {{ clientName }}, seu horário foi reservado com sucesso.</p>
+
+      <a
+        v-if="whatsappConfirmationUrl"
+        :href="whatsappConfirmationUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block w-full py-3.5 bg-green-600 text-white font-bold rounded-xl shadow hover:bg-green-700 transition"
+      >
+        📲 Enviar Confirmação via WhatsApp
+      </a>
+
+      <button @click="resetForm" class="w-full py-3 bg-gray-900 text-white font-bold rounded-xl mt-2">
+        Novo Agendamento
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { db } from '../services/mockStorage'
+import { ref, computed, watch, onMounted } from 'vue'
+import { dataService } from '../services/database'
 
 const step = ref(1)
 const org = ref({
+  id: '',
   name: '',
   address: '',
+  phone: '',
   logo_url: '',
   banner_url: '',
   primary_color: '#0284c7'
 })
 const services = ref([])
 const resources = ref([])
+const bookedTimes = ref([])
 
 const selectedService = ref(null)
 const selectedResource = ref(null)
@@ -137,29 +167,72 @@ const selectedTime = ref('')
 const clientName = ref('')
 const clientPhone = ref('')
 
-const today = new Date().toISOString().split('T')[0]
-const availableTimes = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
+// Data local no fuso horário do dispositivo (evita bug de UTC da noite)
+const getTodayDate = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+const today = getTodayDate()
 
-const loadData = () => {
-  const data = db.get()
-  org.value = data.organization
-  services.value = data.services
-  resources.value = data.resources
+const baseTimes = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
+
+// Computa horários checando ocupação e se já passaram hoje
+const computedTimeSlots = computed(() => {
+  const now = new Date()
+  const currentHours = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0')
+  const isToday = selectedDate.value === today
+
+  return baseTimes.map(time => {
+    const isBooked = bookedTimes.value.includes(time)
+    const isPast = isToday && time <= currentHours
+    return { time, isBooked, isPast }
+  })
+})
+
+// Busca horários já agendados quando a data ou profissional muda
+watch([selectedResource, selectedDate], async ([res, date]) => {
+  if (res && date) {
+    bookedTimes.value = await dataService.getBookedTimes(res.id, date)
+  } else {
+    bookedTimes.value = []
+  }
+})
+
+const loadData = async () => {
+  org.value = await dataService.getOrganization()
+  services.value = await dataService.getServices(org.value?.id)
+  resources.value = await dataService.getProfessionals(org.value?.id)
 }
 
 onMounted(() => {
   loadData()
 })
 
-const confirmBooking = () => {
-  db.addAppointment({
+const whatsappConfirmationUrl = computed(() => {
+  if (!org.value?.phone || !selectedService.value || !selectedResource.value) return ''
+  const cleanPhone = org.value.phone.replace(/\D/g, '')
+  const message = encodeURIComponent(
+    `Olá! Confirmo meu agendamento na ${org.value.name}:\n` +
+    `✂️ Serviço: ${selectedService.value.name}\n` +
+    `👤 Profissional: ${selectedResource.value.name}\n` +
+    `📅 Data: ${selectedDate.value} às ${selectedTime.value}\n` +
+    `Cliente: ${clientName.value}`
+  )
+  return `https://wa.me/55${cleanPhone}?text=${message}`
+})
+
+const confirmBooking = async () => {
+  await dataService.addAppointment({
     service_id: selectedService.value.id,
     resource_id: selectedResource.value.id,
     date: selectedDate.value,
     time: selectedTime.value,
     client_name: clientName.value,
     client_phone: clientPhone.value
-  })
+  }, org.value?.id)
   step.value = 4
 }
 

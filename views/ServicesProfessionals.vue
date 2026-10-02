@@ -3,8 +3,8 @@
     <div class="max-w-6xl mx-auto space-y-6">
       <div class="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div>
-          <h1 class="text-xl font-bold text-gray-800">Profissionais</h1>
-          <p class="text-xs text-gray-500">Cadastre, edite e ative os profissionais da sua agenda.</p>
+          <h1 class="text-xl font-bold text-gray-800">Serviços</h1>
+          <p class="text-xs text-gray-500">Cadastre, edite e ative os serviços da sua agenda.</p>
         </div>
 
         <div class="flex gap-2">
@@ -19,27 +19,22 @@
 
       <div class="grid lg:grid-cols-[1fr_1.2fr] gap-6">
         <div class="bg-white rounded-xl shadow p-6">
-          <h2 class="text-lg font-bold text-gray-800 mb-4">{{ editingId ? 'Editar profissional' : 'Novo profissional' }}</h2>
+          <h2 class="text-lg font-bold text-gray-800 mb-4">{{ editingId ? 'Editar serviço' : 'Novo serviço' }}</h2>
 
-          <form @submit.prevent="saveProfessional" class="space-y-4">
+          <form @submit.prevent="saveService" class="space-y-4">
             <label class="block text-sm font-medium text-gray-700">
-              Nome
+              Descrição
               <input v-model="form.name" class="mt-1 w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500" required />
             </label>
 
             <label class="block text-sm font-medium text-gray-700">
-              Especialidade
+              Tipo de serviço
               <input v-model="form.specialty" class="mt-1 w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500" placeholder="Ex: Barbeiro, Designer, Psicólogo" required />
-            </label>
-
-            <label class="block text-sm font-medium text-gray-700">
-              WhatsApp / Telefone
-              <input v-model="form.phone" class="mt-1 w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-brand-500" />
             </label>
 
             <label class="flex items-center gap-2 text-sm text-gray-700">
               <input type="checkbox" v-model="form.active" class="h-4 w-4" />
-              Profissional ativo
+              Serviço ativo
             </label>
 
             <div class="flex gap-2 pt-2">
@@ -55,12 +50,12 @@
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
           <div class="p-4 border-b bg-gray-50 font-bold text-gray-700 flex justify-between items-center">
-            <span>Lista de profissionais</span>
+            <span>Lista de serviços</span>
             <span class="text-xs bg-gray-200 px-2 py-1 rounded-md text-gray-700">{{ professionals.length }}</span>
           </div>
 
           <div v-if="professionals.length === 0" class="p-8 text-center text-gray-400 text-sm">
-            Nenhum profissional cadastrado ainda.
+            Nenhum serviço cadastrado ainda.
           </div>
 
           <div v-else class="divide-y">
@@ -90,59 +85,10 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import { dataService } from '../services/database'
+<script>
+export default {
+    setup() {
 
-const professionals = ref([])
-const editingId = ref(null)
-const orgId = ref(null)
-const form = ref({
-  name: '',
-  specialty: '',
-  phone: '',
-  active: true
-})
-
-const loadProfessionals = async () => {
-  const org = await dataService.getOrganization()
-  orgId.value = org?.id
-  professionals.value = await dataService.getProfessionals(orgId.value)
-}
-
-onMounted(() => {
-  loadProfessionals()
-})
-
-const saveProfessional = async () => {
-  if (editingId.value) {
-    await dataService.updateProfessional(editingId.value, { ...form.value })
-  } else {
-    await dataService.addProfessional({ ...form.value }, orgId.value)
-  }
-
-  cancelEdit()
-  await loadProfessionals()
-}
-
-const editProfessional = (professional) => {
-  editingId.value = professional.id
-  form.value = { ...professional }
-}
-
-const cancelEdit = () => {
-  editingId.value = null
-  form.value = {
-    name: '',
-    specialty: '',
-    phone: '',
-    active: true
-  }
-}
-
-const deleteProfessional = async (id) => {
-  await dataService.deleteProfessional(id)
-  await loadProfessionals()
-  if (editingId.value === id) cancelEdit()
+    },
 }
 </script>

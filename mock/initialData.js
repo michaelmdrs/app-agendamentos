@@ -27,7 +27,7 @@ export const initialData = {
     { id: 'serv-1', name: 'Corte de Cabelo', duration_minutes: 30, price: 40.00, active: true },
     { id: 'serv-2', name: 'Barba Terapia', duration_minutes: 30, price: 35.00, active: true },
     { id: 'serv-3', name: 'Combo Corte + Barba', duration_minutes: 60, price: 65.00, active: true },
-    { id: 'serv-4', name: 'Sobrançelha / Detalhe', duration_minutes: 15, price: 20.00, active: true }
+    { id: 'serv-4', name: 'Sobrançelha / Detalhe', duration_minutes: 15, price: 20.00, active: true },
   ],
   appointments: [
     {
