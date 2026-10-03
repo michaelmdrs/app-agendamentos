@@ -1,25 +1,26 @@
 <template>
-  <div class="max-w-md mx-auto min-h-screen bg-slate-50 shadow-2xl flex flex-col pb-12 border-x border-slate-200/80 font-sans">
+  <div class="max-w-md mx-auto min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 shadow-2xl flex flex-col pb-24 border-x border-slate-200/60 font-sans relative antialiased selection:bg-brand-500 selection:text-white">
     
     <!-- TELA DE TESTE EXPIRADO (BLOQUEIO SUAVE DE MENSALIDADE) -->
-    <div v-if="subscriptionInfo.expired" class="p-8 my-auto text-center space-y-5">
-      <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+    <div v-if="subscriptionInfo.expired" class="p-8 my-auto text-center space-y-6 animate-fadeIn">
+      <div class="w-24 h-24 bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 rounded-3xl flex items-center justify-center mx-auto text-4xl shadow-xl shadow-amber-500/20">
         ⏳
       </div>
       <div>
-        <h2 class="text-2xl font-black text-gray-900">{{ org.name }}</h2>
-        <p class="text-sm font-semibold text-amber-700 mt-2 bg-amber-50 py-2 px-3 rounded-xl border border-amber-200 inline-block">
-          Agenda online temporariamente pausada
-        </p>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">{{ org.name }}</h2>
+        <div class="mt-2 inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 text-amber-800 text-xs font-bold py-1.5 px-3.5 rounded-full shadow-xs">
+          <span>●</span>
+          <span>Agenda online temporariamente pausada</span>
+        </div>
       </div>
-      <p class="text-xs text-gray-500 max-w-xs mx-auto">
-        Os agendamentos online deste estabelecimento estão temporariamente em manutenção. Entre em contato diretamente pelo WhatsApp para marcar seu horário.
+      <p class="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+        Os agendamentos online deste estabelecimento estão passando por uma rápida atualização. Agende seu horário agora mesmo falando direto no WhatsApp!
       </p>
       <a
         v-if="org.phone"
         :href="`https://wa.me/55${org.phone.replace(/\D/g, '')}?text=Olá,%20gostaria%20de%20agendar%20um%20horário!`"
         target="_blank"
-        class="inline-flex items-center justify-center gap-2 w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-2xl shadow-lg transition"
+        class="inline-flex items-center justify-center gap-2.5 w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black rounded-2xl shadow-xl shadow-green-600/25 transition-all text-sm tracking-wide"
       >
         <span>📲 Chamar no WhatsApp</span>
       </a>
@@ -27,126 +28,166 @@
 
     <!-- FLUXO NORMAL DE AGENDAMENTO -->
     <template v-else>
-      <!-- Hero Header Moderno com Banner e Logo em Destaque -->
-      <div class="relative bg-slate-900 text-white overflow-hidden">
-        <!-- Banner com gradiente e overlay escuro de alto contraste -->
-        <div class="relative h-40 w-full overflow-hidden bg-slate-800">
+      
+      <!-- HERO HEADER VIBRANTE COM BANNER E IDENTIDADE VISUAL -->
+      <div class="relative bg-slate-950 text-white">
+        <!-- Banner de Capa com Gradiente Vibrante e Efeito Overlay -->
+        <div class="relative h-44 w-full overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800">
           <img
             :src="org.banner_url || 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&auto=format&fit=crop&q=80'"
             alt="Capa"
-            class="w-full h-full object-cover opacity-60 scale-105 transition duration-700"
+            class="w-full h-full object-cover opacity-60 scale-105"
           />
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+          <!-- Gradientes de profundidade -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-slate-950"></div>
+          
+          <!-- Badges flutuantes no topo da imagem -->
+          <div class="absolute top-3 inset-x-4 flex justify-between items-center text-xs">
+            <span class="inline-flex items-center gap-1.5 bg-black/50 backdrop-blur-md text-emerald-400 font-bold px-3 py-1 rounded-full border border-emerald-500/30 text-[11px]">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Aberto para Agendamentos
+            </span>
+
+            <span class="inline-flex items-center gap-1 bg-black/50 backdrop-blur-md text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-400/30 text-[11px]">
+              ⭐ 4.9 (128)
+            </span>
+          </div>
         </div>
 
-        <!-- Info do Estabelecimento -->
+        <!-- Logotipo em Destaque e Identidade da Empresa -->
         <div class="px-5 pb-5 pt-0 relative flex flex-col items-center -mt-14 text-center">
-          <div class="w-24 h-24 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-white mb-2.5 relative ring-2 ring-black/5">
-            <img :src="org.logo_url || 'https://via.placeholder.com/150'" :alt="org.name" class="w-full h-full object-cover" />
-          </div>
-          
-          <div class="flex items-center gap-1.5 justify-center">
-            <h1 class="text-xl font-black text-gray-900 tracking-tight">{{ org.name || 'Carregando...' }}</h1>
-            <span class="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold" title="Estabelecimento Verificado">✓</span>
+          <div class="w-24 h-24 rounded-3xl p-1 bg-white shadow-2xl relative ring-4 ring-black/10 overflow-hidden transform hover:scale-105 transition duration-300">
+            <img :src="org.logo_url || 'https://via.placeholder.com/150'" :alt="org.name" class="w-full h-full object-cover rounded-2xl" />
           </div>
 
-          <p class="text-xs text-gray-500 mt-1 flex items-center justify-center gap-1 font-medium">
-            <span>📍 {{ org.address || 'Endereço não informado' }}</span>
-          </p>
+          <div class="mt-3 space-y-1">
+            <div class="flex items-center gap-1.5 justify-center">
+              <h1 class="text-xl font-black text-white tracking-tight">{{ org.name || 'Carregando...' }}</h1>
+              <span class="bg-blue-500 text-white p-0.5 rounded-full text-[10px] w-4 h-4 inline-flex items-center justify-center font-bold shadow-sm" title="Verificado">
+                ✓
+              </span>
+            </div>
+            
+            <p class="text-xs text-slate-300 flex items-center justify-center gap-1 font-medium">
+              <span>📍 {{ org.address || 'Endereço não informado' }}</span>
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- Barra de Progresso / Stepper Interativo e Colorido -->
-      <div class="bg-white border-y border-slate-200/80 px-4 py-3 sticky top-0 z-20 shadow-sm backdrop-blur-md bg-white/95">
-        <div class="flex items-center justify-between text-xs font-bold">
+      <!-- STEPPER / BARRA DE ETAPAS MODERNA COM CORES E ÍCONES -->
+      <div class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-y border-slate-200/80 shadow-xs px-4 py-2.5">
+        <div class="flex items-center justify-between gap-1 max-w-sm mx-auto">
           
-          <div
+          <button
+            type="button"
             @click="step > 1 && (step = 1)"
             :class="[
-              'flex items-center gap-1.5 px-3 py-1.5 rounded-full transition cursor-pointer',
+              'flex-1 py-1.5 px-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5',
               step === 1
-                ? 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                 : step > 1
-                  ? 'text-emerald-700 bg-emerald-50'
-                  : 'text-slate-400'
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : 'text-slate-400 bg-slate-100/70'
             ]"
           >
-            <span>✂️</span>
-            <span>1. Serviço</span>
-          </div>
+            <span>{{ step > 1 ? '✓' : '✂️' }}</span>
+            <span class="truncate">1. Serviços</span>
+          </button>
 
-          <div class="h-0.5 w-4 bg-slate-200"></div>
+          <span class="text-slate-300 text-xs">➔</span>
 
-          <div
+          <button
+            type="button"
             @click="selectedService && selectedResource && (step = 2)"
+            :disabled="!selectedService || !selectedResource"
             :class="[
-              'flex items-center gap-1.5 px-3 py-1.5 rounded-full transition',
+              'flex-1 py-1.5 px-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5',
               step === 2
-                ? 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
                 : step > 2
-                  ? 'text-emerald-700 bg-emerald-50'
-                  : 'text-slate-400'
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : 'text-slate-400 bg-slate-100/70'
             ]"
           >
-            <span>📅</span>
-            <span>2. Horário</span>
-          </div>
+            <span>{{ step > 2 ? '✓' : '📅' }}</span>
+            <span class="truncate">2. Horário</span>
+          </button>
 
-          <div class="h-0.5 w-4 bg-slate-200"></div>
+          <span class="text-slate-300 text-xs">➔</span>
 
-          <div
+          <button
+            type="button"
+            :disabled="step < 3"
             :class="[
-              'flex items-center gap-1.5 px-3 py-1.5 rounded-full transition',
+              'flex-1 py-1.5 px-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5',
               step === 3
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'text-slate-400'
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                : 'text-slate-400 bg-slate-100/70'
             ]"
           >
             <span>✅</span>
-            <span>3. Confirmar</span>
-          </div>
+            <span class="truncate">3. Confirmar</span>
+          </button>
         </div>
       </div>
 
-      <!-- ETAPA 1: ESCOLHA DO SERVIÇO E PROFISSIONAL -->
-      <div v-if="step === 1" class="p-5 space-y-6">
+      <!-- ETAPA 1: SERVIÇOS & PROFISSIONAIS (DESIGN VIBRANTE) -->
+      <div v-if="step === 1" class="p-5 space-y-6 animate-fadeIn">
+        
+        <!-- Seleção de Serviço -->
         <div>
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="font-extrabold text-slate-800 text-sm uppercase tracking-wider">
-              1. Selecione o Serviço
-            </h2>
-            <span class="text-xs text-slate-400 font-semibold">{{ services.length }} disponíveis</span>
+          <div class="flex items-center justify-between mb-3.5">
+            <div>
+              <h2 class="font-black text-slate-900 text-sm tracking-tight uppercase flex items-center gap-1.5">
+                <span class="text-brand-600">✂️</span>
+                <span>Escolha o Serviço</span>
+              </h2>
+              <p class="text-xs text-slate-400 font-medium">Toque para selecionar</p>
+            </div>
+            <span class="text-xs bg-slate-200/70 text-slate-700 font-extrabold px-2.5 py-1 rounded-full">
+              {{ services.length }} opções
+            </span>
           </div>
 
-          <div class="space-y-2.5">
+          <div class="space-y-3">
             <div
               v-for="service in services"
               :key="service.id"
               @click="selectService(service)"
               :class="[
-                'p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 flex justify-between items-center group',
+                'p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 flex justify-between items-center group relative overflow-hidden',
                 selectedService?.id === service.id
-                  ? 'border-brand-600 bg-brand-50/60 shadow-md ring-2 ring-brand-500/20'
-                  : 'border-slate-200/90 bg-white hover:border-slate-300 hover:shadow-sm'
+                  ? 'border-brand-500 bg-gradient-to-r from-brand-50/80 to-blue-50/40 shadow-lg shadow-brand-500/10 ring-2 ring-brand-500/20 scale-[1.01]'
+                  : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
               ]"
             >
-              <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                  <span
+              <!-- Barra lateral de cor quando selecionado -->
+              <div
+                v-if="selectedService?.id === service.id"
+                class="absolute left-0 inset-y-0 w-1.5 bg-brand-600"
+              ></div>
+
+              <div class="space-y-1.5 pl-1">
+                <div class="flex items-center gap-2.5">
+                  <div
                     :class="[
-                      'w-4 h-4 rounded-full border flex items-center justify-center transition',
+                      'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all',
                       selectedService?.id === service.id
-                        ? 'border-brand-600 bg-brand-600 text-white text-[10px]'
-                        : 'border-slate-300 bg-white'
+                        ? 'border-brand-600 bg-brand-600 text-white text-xs font-black shadow-xs'
+                        : 'border-slate-300 bg-white group-hover:border-slate-400'
                     ]"
                   >
                     <span v-if="selectedService?.id === service.id">✓</span>
-                  </span>
-                  <p class="font-bold text-slate-900 group-hover:text-brand-700 transition">{{ service.name }}</p>
+                  </div>
+                  <h3 class="font-extrabold text-slate-900 group-hover:text-brand-700 transition text-sm">
+                    {{ service.name }}
+                  </h3>
                 </div>
-                
-                <div class="flex items-center gap-2 pl-6">
-                  <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-semibold flex items-center gap-1">
+
+                <div class="flex items-center gap-2 pl-7.5">
+                  <span class="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg font-bold flex items-center gap-1 border border-slate-200/60">
                     ⏱ {{ service.duration_minutes }} min
                   </span>
                   <p v-if="service.description" class="text-[11px] text-slate-400 italic line-clamp-1">
@@ -155,8 +196,9 @@
                 </div>
               </div>
 
-              <div class="text-right pl-2">
-                <span class="text-base font-extrabold text-slate-900 group-hover:text-brand-700 transition">
+              <!-- Preço em Destaque Estilo Badge Colorida -->
+              <div class="text-right pl-3 shrink-0">
+                <span class="inline-block px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-black text-sm tracking-tight shadow-xs">
                   R$ {{ Number(service.price).toFixed(2) }}
                 </span>
               </div>
@@ -164,42 +206,48 @@
           </div>
         </div>
 
-        <!-- Escolha do Profissional -->
-        <div v-if="selectedService" class="pt-2 animate-fadeIn">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="font-extrabold text-slate-800 text-sm uppercase tracking-wider">
-              2. Escolha o Profissional
-            </h2>
-            <span class="text-xs text-brand-600 font-bold">Passo 2 de 3</span>
+        <!-- Seleção de Profissional -->
+        <div v-if="selectedService" class="pt-2 animate-fadeIn space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-black text-slate-900 text-sm tracking-tight uppercase flex items-center gap-1.5">
+                <span class="text-brand-600">👤</span>
+                <span>Escolha o Profissional</span>
+              </h2>
+              <p class="text-xs text-slate-400 font-medium">Quem vai te atender?</p>
+            </div>
           </div>
 
-          <div v-if="filteredProfessionals.length === 0" class="text-xs text-slate-500 p-4 border rounded-xl bg-white text-center">
+          <div v-if="filteredProfessionals.length === 0" class="text-xs text-slate-500 p-4 border rounded-2xl bg-white text-center shadow-xs">
             Nenhum profissional disponível para este serviço no momento.
           </div>
 
-          <div v-else class="grid grid-cols-2 gap-2.5">
+          <div v-else class="grid grid-cols-2 gap-3">
             <button
               v-for="res in filteredProfessionals"
               :key="res.id"
               type="button"
               @click="selectedResource = res"
               :class="[
-                'p-3 rounded-2xl border-2 transition-all duration-200 flex items-center gap-3 text-left relative overflow-hidden',
+                'p-3.5 rounded-2xl border-2 transition-all duration-200 flex items-center gap-3 text-left relative overflow-hidden group',
                 selectedResource?.id === res.id
-                  ? 'border-slate-900 bg-slate-900 text-white shadow-lg'
-                  : 'border-slate-200 bg-white text-slate-800 hover:border-slate-300'
+                  ? 'border-slate-900 bg-slate-900 text-white shadow-xl scale-[1.02]'
+                  : 'border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:shadow-md'
               ]"
             >
-              <div class="w-10 h-10 rounded-xl overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center font-bold text-sm shadow-inner">
-                <img v-if="res.avatar_url" :src="res.avatar_url" :alt="res.name" class="w-full h-full object-cover" />
-                <span v-else :class="selectedResource?.id === res.id ? 'text-slate-900' : 'text-brand-700'">
-                  {{ res.name.charAt(0).toUpperCase() }}
-                </span>
+              <div class="relative shrink-0">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center font-black text-base shadow-sm ring-2 ring-brand-500/40">
+                  <img v-if="res.avatar_url" :src="res.avatar_url" :alt="res.name" class="w-full h-full object-cover" />
+                  <span v-else :class="selectedResource?.id === res.id ? 'text-white' : 'text-brand-700'">
+                    {{ res.name.charAt(0).toUpperCase() }}
+                  </span>
+                </div>
+                <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
               </div>
 
               <div class="truncate">
-                <p class="font-bold text-xs truncate">{{ res.name }}</p>
-                <p :class="['text-[10px] truncate mt-0.5', selectedResource?.id === res.id ? 'text-slate-300' : 'text-slate-400 font-medium']">
+                <p class="font-black text-xs truncate">{{ res.name }}</p>
+                <p :class="['text-[11px] truncate mt-0.5', selectedResource?.id === res.id ? 'text-slate-300' : 'text-slate-400 font-medium']">
                   {{ res.specialty || 'Especialista' }}
                 </p>
               </div>
@@ -207,58 +255,51 @@
           </div>
         </div>
 
-        <!-- Botão Avançar -->
-        <button
-          v-if="selectedService && selectedResource"
-          @click="step = 2"
-          :style="{ backgroundColor: org.primary_color || '#0284c7' }"
-          class="w-full py-4 text-white font-extrabold rounded-2xl shadow-xl hover:opacity-95 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 text-sm uppercase tracking-wider"
-        >
-          <span>Avançar para Horários</span>
-          <span>➔</span>
-        </button>
       </div>
 
-      <!-- ETAPA 2: DATA E HORÁRIOS -->
-      <div v-if="step === 2" class="p-5 space-y-6">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+      <!-- ETAPA 2: DATA E HORÁRIOS (SELETOR DE DIAS VIBRANTE) -->
+      <div v-if="step === 2" class="p-5 space-y-6 animate-fadeIn">
+        
+        <!-- Carrossel de Dias da Semana -->
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="font-extrabold text-slate-800 text-sm uppercase tracking-wider">
-              Escolha o Dia
+            <h2 class="font-black text-slate-900 text-sm tracking-tight uppercase flex items-center gap-1.5">
+              <span class="text-brand-600">📅</span>
+              <span>Escolha o Dia</span>
             </h2>
-            <div class="flex gap-1.5">
-              <button
-                type="button"
-                @click="selectedDate = today"
-                :class="['text-xs px-2.5 py-1 rounded-lg font-bold border transition', selectedDate === today ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 text-slate-600 border-slate-200']"
-              >
-                Hoje
-              </button>
-              <button
-                type="button"
-                @click="selectedDate = tomorrow"
-                :class="['text-xs px-2.5 py-1 rounded-lg font-bold border transition', selectedDate === tomorrow ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 text-slate-600 border-slate-200']"
-              >
-                Amanhã
-              </button>
-            </div>
+            <span class="text-xs text-brand-600 font-bold">Próximos 7 dias</span>
           </div>
 
-          <input
-            type="date"
-            v-model="selectedDate"
-            :min="today"
-            class="w-full p-3.5 border-2 border-slate-200 rounded-xl text-slate-800 font-bold focus:border-brand-500 focus:ring-0 outline-none text-sm bg-slate-50/50"
-          />
+          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+            <button
+              v-for="d in availableDays"
+              :key="d.dateStr"
+              type="button"
+              @click="selectedDate = d.dateStr"
+              :class="[
+                'shrink-0 flex flex-col items-center justify-center w-16 py-3 rounded-2xl border-2 transition-all font-sans',
+                selectedDate === d.dateStr
+                  ? 'border-brand-600 bg-gradient-to-b from-brand-600 to-brand-700 text-white shadow-lg shadow-brand-600/30 scale-105'
+                  : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+              ]"
+            >
+              <span class="text-[10px] font-bold uppercase tracking-wider opacity-80">{{ d.dayName }}</span>
+              <span class="text-lg font-black mt-0.5 leading-none">{{ d.dayNumber }}</span>
+              <span class="text-[9px] font-medium opacity-70 mt-1">{{ d.monthName }}</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Grade de Horários -->
-        <div v-if="selectedDate" class="space-y-3">
+        <!-- Grade de Horários Disponíveis -->
+        <div v-if="selectedDate" class="space-y-3.5 pt-2">
           <div class="flex items-center justify-between">
-            <h2 class="font-extrabold text-slate-800 text-sm uppercase tracking-wider">
-              Horários com {{ selectedResource?.name }}
-            </h2>
-            <span class="text-xs text-slate-400 font-medium">Toque para selecionar</span>
+            <div>
+              <h2 class="font-black text-slate-900 text-sm tracking-tight uppercase flex items-center gap-1.5">
+                <span class="text-brand-600">⏱️</span>
+                <span>Horários Disponíveis</span>
+              </h2>
+              <p class="text-xs text-slate-400 font-medium">Com {{ selectedResource?.name }}</p>
+            </div>
           </div>
 
           <div class="grid grid-cols-3 gap-2.5">
@@ -268,125 +309,131 @@
               :disabled="slot.isBooked || slot.isPast"
               @click="!slot.isBooked && !slot.isPast && (selectedTime = slot.time)"
               :class="[
-                'py-3 text-sm font-extrabold border-2 rounded-xl transition-all relative flex flex-col items-center justify-center',
+                'py-3.5 rounded-2xl border-2 font-black text-sm transition-all flex flex-col items-center justify-center relative overflow-hidden',
                 slot.isBooked || slot.isPast
-                  ? 'bg-slate-100/80 text-slate-300 border-slate-200/60 cursor-not-allowed line-through'
+                  ? 'bg-slate-100 text-slate-300 border-slate-200/70 cursor-not-allowed line-through'
                   : selectedTime === slot.time
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-md scale-[1.02]'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400 hover:bg-slate-50'
+                    ? 'border-brand-600 bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-xl shadow-brand-600/30 scale-105 ring-2 ring-brand-500/20'
+                    : 'bg-white border-slate-200 text-slate-800 hover:border-slate-400 hover:shadow-sm'
               ]"
             >
               <span>{{ slot.time }}</span>
-              <span v-if="slot.isBooked" class="text-[9px] text-red-400 font-semibold no-underline -mt-0.5">Ocupado</span>
+              <span v-if="slot.isBooked" class="text-[9px] font-bold text-red-400 no-underline -mt-0.5">Ocupado</span>
             </button>
           </div>
         </div>
-
-        <div class="flex gap-2.5 pt-2">
-          <button @click="step = 1" class="w-1/3 py-3.5 border-2 border-slate-300 font-bold rounded-2xl text-slate-600 hover:bg-slate-100 transition text-sm">
-            Voltar
-          </button>
-          <button
-            v-if="selectedDate && selectedTime"
-            @click="step = 3"
-            :style="{ backgroundColor: org.primary_color || '#0284c7' }"
-            class="w-2/3 py-3.5 text-white font-extrabold rounded-2xl shadow-xl hover:opacity-95 transition text-sm uppercase tracking-wider"
-          >
-            Avançar
-          </button>
-        </div>
       </div>
 
-      <!-- ETAPA 3: DADOS PESSOAIS E CONFIRMAÇÃO (ESTILO VOUCHER / TICKET) -->
-      <div v-if="step === 3" class="p-5 space-y-5">
+      <!-- ETAPA 3: CONFIRMAÇÃO (ESTILO BILHETE / TICKET VIP) -->
+      <div v-if="step === 3" class="p-5 space-y-6 animate-fadeIn">
         
-        <!-- Ticket de Resumo do Atendimento -->
-        <div class="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-sm">
-          <div class="bg-slate-900 text-white p-4">
-            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-300">Resumo da Reserva</span>
-            <h3 class="text-base font-extrabold mt-0.5">{{ selectedService?.name }}</h3>
+        <!-- Ticket VIP com corte e detalhes -->
+        <div class="bg-white rounded-3xl border-2 border-slate-200/90 shadow-xl overflow-hidden relative">
+          <!-- Topo do Ticket -->
+          <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white p-5 relative">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] uppercase font-black tracking-widest text-brand-400 bg-brand-950/80 px-2.5 py-0.5 rounded-full border border-brand-500/30">
+                  Resumo da Reserva
+                </span>
+                <h3 class="text-lg font-black mt-2 tracking-tight">{{ selectedService?.name }}</h3>
+              </div>
+              <span class="text-2xl">🎟️</span>
+            </div>
           </div>
 
-          <div class="p-4 space-y-2.5 text-xs text-slate-600 bg-slate-50/50">
-            <div class="flex justify-between">
-              <span class="text-slate-400">Profissional:</span>
-              <span class="font-bold text-slate-800">{{ selectedResource?.name }}</span>
+          <!-- Corpo do Ticket -->
+          <div class="p-5 space-y-3 bg-gradient-to-b from-white to-slate-50/50 text-xs">
+            <div class="flex justify-between items-center py-1 border-b border-dashed border-slate-200">
+              <span class="text-slate-400 font-medium">Profissional:</span>
+              <span class="font-extrabold text-slate-800 text-sm flex items-center gap-1.5">
+                <span>👤</span> {{ selectedResource?.name }}
+              </span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Data & Horário:</span>
-              <span class="font-bold text-slate-800">{{ formatDate(selectedDate) }} às {{ selectedTime }}</span>
+
+            <div class="flex justify-between items-center py-1 border-b border-dashed border-slate-200">
+              <span class="text-slate-400 font-medium">Data & Horário:</span>
+              <span class="font-extrabold text-slate-800 text-sm flex items-center gap-1.5">
+                <span>📅</span> {{ formatDate(selectedDate) }} às {{ selectedTime }}
+              </span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Duração estimada:</span>
-              <span class="font-bold text-slate-800">{{ selectedService?.duration_minutes }} minutos</span>
+
+            <div class="flex justify-between items-center py-1 border-b border-dashed border-slate-200">
+              <span class="text-slate-400 font-medium">Tempo de atendimento:</span>
+              <span class="font-extrabold text-slate-800">{{ selectedService?.duration_minutes }} minutos</span>
             </div>
-            <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">
-              <span class="font-bold text-slate-700">Valor a pagar no local:</span>
-              <span class="font-extrabold text-base text-brand-700">R$ {{ Number(selectedService?.price).toFixed(2) }}</span>
+
+            <div class="pt-2 flex justify-between items-center">
+              <div>
+                <span class="text-xs text-slate-500 font-semibold block">Valor total:</span>
+                <span class="text-[10px] text-emerald-600 font-bold">Pague no local após o atendimento</span>
+              </div>
+              <span class="text-xl font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200">
+                R$ {{ Number(selectedService?.price).toFixed(2) }}
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- Formulário de Identificação do Cliente -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h2 class="font-extrabold text-slate-800 text-sm uppercase tracking-wider">
-            Seus Dados para Contato
+        <!-- Formulário do Cliente -->
+        <div class="bg-white p-5 rounded-3xl border-2 border-slate-200/90 shadow-sm space-y-4">
+          <h2 class="font-black text-slate-900 text-sm tracking-tight uppercase flex items-center gap-1.5">
+            <span>📝</span>
+            <span>Seus Dados para Contato</span>
           </h2>
 
-          <div>
-            <label class="text-xs font-bold text-slate-600 block mb-1">Nome Completo *</label>
-            <input
-              v-model="clientName"
-              placeholder="Ex: João da Silva"
-              class="w-full p-3.5 border-2 border-slate-200 rounded-xl outline-none focus:border-brand-500 font-medium text-sm"
-              required
-            />
-          </div>
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-extrabold text-slate-700 block mb-1">Seu Nome Completo *</label>
+              <input
+                v-model="clientName"
+                placeholder="Ex: João da Silva"
+                class="w-full p-3.5 border-2 border-slate-200 rounded-2xl outline-none focus:border-brand-500 font-medium text-sm transition"
+                required
+              />
+            </div>
 
-          <div>
-            <label class="text-xs font-bold text-slate-600 block mb-1">WhatsApp / Celular com DDD *</label>
-            <input
-              v-model="clientPhone"
-              placeholder="(11) 98888-7777"
-              class="w-full p-3.5 border-2 border-slate-200 rounded-xl outline-none focus:border-brand-500 font-medium text-sm"
-              required
-            />
+            <div>
+              <label class="text-xs font-extrabold text-slate-700 block mb-1">WhatsApp / Celular com DDD *</label>
+              <input
+                v-model="clientPhone"
+                placeholder="(11) 98888-7777"
+                class="w-full p-3.5 border-2 border-slate-200 rounded-2xl outline-none focus:border-brand-500 font-medium text-sm transition"
+                required
+              />
+            </div>
           </div>
         </div>
 
-        <div class="flex gap-2.5 pt-2">
-          <button @click="step = 2" class="w-1/3 py-3.5 border-2 border-slate-300 font-bold rounded-2xl text-slate-600 hover:bg-slate-100 transition text-sm">
-            Voltar
-          </button>
-          <button
-            v-if="clientName.trim() && clientPhone.trim()"
-            @click="confirmBooking"
-            :style="{ backgroundColor: org.primary_color || '#0284c7' }"
-            class="w-2/3 py-4 text-white font-extrabold rounded-2xl shadow-xl hover:opacity-95 transition text-sm uppercase tracking-wider transform active:scale-[0.99]"
-          >
-            Confirmar Agendamento
-          </button>
-        </div>
       </div>
 
-      <!-- ETAPA 4: SUCESSO & BOTÃO DO WHATSAPP VIBRANTE -->
+      <!-- ETAPA 4: SUCESSO & BOTÃO DO WHATSAPP OFICIAL -->
       <div v-if="step === 4" class="p-6 text-center space-y-6 my-auto animate-fadeIn">
-        <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto text-4xl font-extrabold shadow-lg shadow-emerald-500/20">
+        <div class="w-24 h-24 bg-gradient-to-tr from-emerald-500 to-emerald-300 text-white rounded-3xl flex items-center justify-center mx-auto text-4xl font-black shadow-2xl shadow-emerald-500/30">
           ✓
         </div>
         
-        <div>
-          <h2 class="text-2xl font-black text-slate-900 tracking-tight">Agendamento Confirmado!</h2>
-          <p class="text-slate-500 text-sm mt-1.5">
+        <div class="space-y-1">
+          <h2 class="text-2xl font-black text-slate-900 tracking-tight">Agendamento Realizado!</h2>
+          <p class="text-slate-500 text-xs max-w-xs mx-auto">
             Obrigado <strong class="text-slate-800">{{ clientName }}</strong>, seu horário foi reservado com sucesso no sistema da <strong>{{ org.name }}</strong>.
           </p>
         </div>
 
-        <!-- Cartão de Detalhes -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 text-left text-xs space-y-1.5 shadow-sm">
-          <p><strong>Serviço:</strong> {{ selectedService?.name }}</p>
-          <p><strong>Profissional:</strong> {{ selectedResource?.name }}</p>
-          <p><strong>Horário:</strong> {{ formatDate(selectedDate) }} às {{ selectedTime }}</p>
+        <!-- Card de Resumo -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 text-left text-xs space-y-2 shadow-sm">
+          <div class="flex justify-between border-b pb-1.5">
+            <span class="text-slate-400">Serviço:</span>
+            <span class="font-bold text-slate-800">{{ selectedService?.name }}</span>
+          </div>
+          <div class="flex justify-between border-b pb-1.5">
+            <span class="text-slate-400">Profissional:</span>
+            <span class="font-bold text-slate-800">{{ selectedResource?.name }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Data e Hora:</span>
+            <span class="font-bold text-slate-800">{{ formatDate(selectedDate) }} às {{ selectedTime }}</span>
+          </div>
         </div>
 
         <!-- Botão Oficial do WhatsApp com Efeito de Destaque -->
@@ -396,12 +443,12 @@
             :href="whatsappConfirmationUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black rounded-2xl shadow-xl shadow-green-600/30 transition-all flex items-center justify-center gap-2.5 text-base tracking-wide transform hover:-translate-y-0.5"
+            class="w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black rounded-2xl shadow-xl shadow-green-600/30 transition-all flex items-center justify-center gap-2.5 text-base tracking-wide transform hover:-translate-y-0.5 active:scale-95"
           >
             <span>📲</span>
-            <span>Enviar Confirmação no WhatsApp</span>
+            <span>Enviar Confirmação via WhatsApp</span>
           </a>
-          <p class="text-[11px] text-slate-400">Clique para avisar a barbearia pelo WhatsApp em 1 clique</p>
+          <p class="text-[11px] text-slate-400 font-medium">Toque para avisar a barbearia pelo WhatsApp em 1 clique</p>
         </div>
 
         <button
@@ -411,6 +458,82 @@
           Fazer Outro Agendamento
         </button>
       </div>
+
+      <!-- BARRA FIXA INFERIOR (STICKY ACTION BAR ESTILO APP NATIVO) -->
+      <div
+        v-if="step < 4"
+        class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-2xl p-3.5 max-w-md mx-auto"
+      >
+        <div class="flex items-center justify-between gap-3">
+          
+          <button
+            v-if="step > 1"
+            type="button"
+            @click="step--"
+            class="px-4 py-3.5 border-2 border-slate-200 font-bold rounded-2xl text-slate-600 hover:bg-slate-100 transition text-xs"
+          >
+            Voltar
+          </button>
+
+          <!-- Preço ou Info no Canto Esquerdo se estiver no Step 1 ou 2 -->
+          <div v-if="selectedService" class="flex-1 truncate">
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Selecionado</p>
+            <p class="text-xs font-black text-slate-900 truncate">{{ selectedService.name }}</p>
+            <p class="text-xs font-extrabold text-emerald-600">R$ {{ Number(selectedService.price).toFixed(2) }}</p>
+          </div>
+
+          <!-- Botões de Avançar -->
+          <button
+            v-if="step === 1"
+            type="button"
+            :disabled="!selectedService || !selectedResource"
+            @click="step = 2"
+            :class="[
+              'py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg',
+              selectedService && selectedResource
+                ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-brand-600/30 hover:opacity-95 transform active:scale-95'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+            ]"
+          >
+            <span>Horários</span>
+            <span>➔</span>
+          </button>
+
+          <button
+            v-if="step === 2"
+            type="button"
+            :disabled="!selectedDate || !selectedTime"
+            @click="step = 3"
+            :class="[
+              'py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg',
+              selectedDate && selectedTime
+                ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-brand-600/30 hover:opacity-95 transform active:scale-95'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+            ]"
+          >
+            <span>Confirmar</span>
+            <span>➔</span>
+          </button>
+
+          <button
+            v-if="step === 3"
+            type="button"
+            :disabled="!clientName.trim() || !clientPhone.trim()"
+            @click="confirmBooking"
+            :class="[
+              'flex-1 py-4 px-6 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-xl',
+              clientName.trim() && clientPhone.trim()
+                ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-emerald-600/30 hover:opacity-95 transform active:scale-95'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+            ]"
+          >
+            <span>Finalizar Reserva</span>
+            <span>✓</span>
+          </button>
+
+        </div>
+      </div>
+
     </template>
 
   </div>
@@ -446,26 +569,39 @@ const selectedTime = ref('')
 const clientName = ref('')
 const clientPhone = ref('')
 
-// Data local no fuso horário do Brasil (evita o bug de UTC das 21h)
-const getLocalDateString = (daysOffset = 0) => {
-  const date = new Date()
-  if (daysOffset > 0) date.setDate(date.getDate() + daysOffset)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+// Gera próximos 7 dias para o carrossel interativo
+const availableDays = computed(() => {
+  const days = []
+  const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+  const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+  
+  for (let i = 0; i < 7; i++) {
+    const d = new Date()
+    d.setDate(d.getDate() + i)
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    const dateStr = `${year}-${month}-${day}`
+    
+    days.push({
+      dateStr,
+      dayNumber: d.getDate(),
+      dayName: i === 0 ? 'Hoje' : i === 1 ? 'Amanhã' : weekDays[d.getDay()],
+      monthName: months[d.getMonth()]
+    })
+  }
+  return days
+})
 
-const today = getLocalDateString(0)
-const tomorrow = getLocalDateString(1)
+const today = computed(() => availableDays.value[0]?.dateStr || '')
 
 const baseTimes = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00']
 
-// Computa horários livres
+// Computa horários livres checando ocupação
 const computedTimeSlots = computed(() => {
   const now = new Date()
   const currentHours = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0')
-  const isToday = selectedDate.value === today
+  const isToday = selectedDate.value === today.value
 
   return baseTimes.map(time => {
     const isBooked = bookedTimes.value.includes(time)
@@ -520,8 +656,10 @@ const loadData = async () => {
 }
 
 onMounted(() => {
-  selectedDate.value = today
   loadData()
+  if (availableDays.value.length > 0) {
+    selectedDate.value = availableDays.value[0].dateStr
+  }
 })
 
 const formatDate = (dateStr) => {
@@ -562,7 +700,9 @@ const resetForm = () => {
   step.value = 1
   selectedService.value = null
   selectedResource.value = null
-  selectedDate.value = today
+  if (availableDays.value.length > 0) {
+    selectedDate.value = availableDays.value[0].dateStr
+  }
   selectedTime.value = ''
   clientName.value = ''
   clientPhone.value = ''
@@ -571,10 +711,19 @@ const resetForm = () => {
 
 <style scoped>
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+/* Ocultar barra de rolagem horizontal mantendo navegação */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
