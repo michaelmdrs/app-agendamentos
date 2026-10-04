@@ -1,4 +1,4 @@
-# 🚀 Guia Oficial: Produção, Integração PostgreSQL e Prospecção Comercial (AgendaFlex)
+# 🚀 Guia Oficial: Produção, Integração PostgreSQL e Prospecção Comercial (Marcô)
 
 Este documento reúne a auditoria técnica completa, as correções necessárias, o esquema de banco de dados **PostgreSQL**, o passo a passo de deploy em plataformas **gratuitas/open-source** e o roteiro comercial para prospectar seus primeiros clientes com sucesso.
 
@@ -29,11 +29,11 @@ Este documento reúne a auditoria técnica completa, as correções necessárias
    - O arquivo `services/auth.js` valida o login apenas no navegador.
    - Qualquer pessoa com conhecimentos básicos pode abrir o Console do Navegador (F12) e executar:
      ```javascript
-     localStorage.setItem('agendaflex_admin_session', JSON.stringify({ loggedIn: true }))
+     localStorage.setItem('marco_admin_session', JSON.stringify({ loggedIn: true }))
      ```
      e terá acesso irrestrito ao painel administrativo `/admin`.
 2. **Credenciais Hardcoded no Código:**
-   - O e-mail `admin@agendaflex.com` e a senha `admin123` estão expostos no código-fonte javascript compilado. Qualquer usuário pode encontrá-los inspecionando os arquivos `.js`.
+   - O e-mail `admin@marco.com` e a senha `admin123` estão expostos no código-fonte javascript compilado. Qualquer usuário pode encontrá-los inspecionando os arquivos `.js`.
 3. **Senhas em Texto Puro (Plaintext):**
    - Não há criptografia (hash com `bcrypt` ou `argon2`). Armazenar senhas em texto puro viola as boas práticas e leis de privacidade (LGPD).
 4. **Falta de Isolamento Multiusuário (Multi-Tenancy):**
@@ -177,7 +177,7 @@ INSERT INTO professionals (organization_id, name, specialty, phone) VALUES
 
 ### Opção Recomendada: Supabase (Mais rápido para conectar com Vue)
 1. Crie uma conta gratuita em [supabase.com](https://supabase.com/).
-2. Clique em **"New Project"**, defina o nome (ex: `agendaflex-db`) e uma senha segura para o banco. Escolha a região mais próxima (`São Paulo (sa-east-1)`).
+2. Clique em **"New Project"**, defina o nome (ex: `marco-db`) e uma senha segura para o banco. Escolha a região mais próxima (`São Paulo (sa-east-1)`).
 3. No menu lateral esquerdo, vá em **SQL Editor**, cole todo o script da seção 3 e clique em **Run**.
 4. No menu lateral, clique em **Project Settings** -> **API**.
 5. Copie duas informações essenciais:
@@ -222,7 +222,7 @@ Tanto a **Vercel** quanto a **Cloudflare Pages** são gratuitas e fornecem SSL a
    - `VITE_SUPABASE_URL`: sua URL do Supabase.
    - `VITE_SUPABASE_ANON_KEY`: sua chave pública anon do Supabase.
 6. Clique em **Deploy**.
-7. Em menos de 2 minutos você terá uma URL ativa (ex: `https://agendaflex.vercel.app`).
+7. Em menos de 2 minutos você terá uma URL ativa (ex: `https://marco.vercel.app`).
 
 ### Configuração de Rotas no Vue Router (SPA Refresh Fix):
 Para que rotas como `/admin` funcionem ao atualizar a página (F5) na Vercel, crie um arquivo `vercel.json` na raiz:
@@ -355,7 +355,7 @@ Não tente vender uma mensalidade no primeiro contato. Use o modelo de **Valida�
 
 2. **Setup Rápido em 10 Minutos:**
    - Cadastre o logo, o nome e os serviços da barbearia no banco.
-   - Entregue a ele o link pronto: `agendaflex.app/barbearia-do-ze`.
+   - Entregue a ele o link pronto: `marco.app/barbearia-do-ze`.
    - Peça para ele colocar o link na bio do Instagram e na mensagem automática do WhatsApp Business.
 
 3. **Fechamento após os 15 dias:**

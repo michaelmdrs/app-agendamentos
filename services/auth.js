@@ -14,12 +14,10 @@ export const auth = {
   },
   login({ email, password }) {
     const data = JSON.parse(localStorage.getItem('app_agendamento_db') || '{}')
-    const admin = data.admin || {
-      email: 'admin@agendaflex.com',
-      password: 'admin123'
-    }
+    const admin = data.admin || { email: 'admin@marco.app', password: 'admin123' }
+    const allowedEmails = ['admin@marco.app', 'admin@agendaflex.com', admin.email]
 
-    if (email === admin.email && password === admin.password) {
+    if (allowedEmails.includes(email) && password === (admin.password || 'admin123')) {
       const session = { email, loggedIn: true, role: 'admin' }
       localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session))
       return true

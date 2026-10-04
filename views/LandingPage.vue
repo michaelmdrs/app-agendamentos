@@ -6,13 +6,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <!-- Logo -->
-        <router-link to="/" class="flex items-center gap-2.5 group">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center text-xl font-black text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition">
-            📅
+        <router-link to="/" class="flex items-center gap-3 group">
+          <div class="h-10 px-3 bg-white rounded-2xl shadow-md border border-white/20 flex items-center justify-center group-hover:scale-105 transition">
+            <img :src="logoTight" alt="Marcô - Agendamento Inteligente" class="h-6 w-auto object-contain" />
           </div>
-          <span class="text-xl font-black tracking-tight text-white">
-            Agenda<span class="text-brand-500">Flex</span>
-          </span>
         </router-link>
 
         <!-- Navegação Desktop -->
@@ -364,7 +361,7 @@
             </div>
 
             <a
-              href="https://wa.me/5511999998888?text=Olá,%20gostaria%20de%20iniciar%20meu%20teste%20grátis%20no%20Plano%20Solo%20do%20AgendaFlex!"
+              href="https://wa.me/5511999998888?text=Olá,%20gostaria%20de%20iniciar%20meu%20teste%20grátis%20no%20Plano%20Solo%20do%20Marcô!"
               target="_blank"
               class="w-full py-4 text-center bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider rounded-2xl border border-slate-700 transition"
             >
@@ -398,7 +395,7 @@
             </div>
 
             <a
-              href="https://wa.me/5511999998888?text=Olá,%20gostaria%20de%20iniciar%20meu%20teste%20grátis%20no%20Plano%20Equipe%20do%20AgendaFlex!"
+              href="https://wa.me/5511999998888?text=Olá,%20gostaria%20de%20iniciar%20meu%20teste%20grátis%20no%20Plano%20Equipe%20do%20Marcô!"
               target="_blank"
               class="w-full py-4 text-center bg-gradient-to-r from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-lg shadow-brand-500/25 transition transform hover:scale-[1.02] active:scale-95"
             >
@@ -451,13 +448,15 @@
     <footer class="border-t border-slate-800 bg-slate-950 py-12 text-slate-500 text-xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
         
-        <div class="flex items-center gap-2">
-          <span class="text-base">📅</span>
-          <span class="font-bold text-slate-300">AgendaFlex</span>
-          <span>— Sistema de Agendamento Online</span>
+        <div class="flex items-center gap-3">
+          <div class="h-8 px-2.5 bg-white rounded-xl shadow flex items-center justify-center">
+            <img :src="logoTight" alt="Marcô" class="h-5 w-auto object-contain" />
+          </div>
+          <span class="font-bold text-slate-300">Marcô</span>
+          <span>— Sistema de Agendamento Inteligente</span>
         </div>
 
-        <p>© 2026 Todos os direitos reservados.</p>
+        <p>© 2026 Marcô. Todos os direitos reservados.</p>
       </div>
     </footer>
 
@@ -466,6 +465,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import logoTight from '../assets/img/logo-tight.png'
 
 const activeFaq = ref(null)
 
@@ -488,7 +488,7 @@ const faqList = [
   },
   {
     question: 'Como os clientes sabem onde agendar?',
-    answer: 'Você coloca o link exclusivo da sua agenda (ex: agendaflex.com/sua-barbearia) na Bio do seu Instagram e configura como mensagem de ausência no seu WhatsApp Business.'
+    answer: 'Você coloca o link exclusivo da sua agenda (ex: marco.app/sua-barbearia) na Bio do seu Instagram e configura como mensagem de ausência no seu WhatsApp Business.'
   },
   {
     question: 'Existe fidelidade ou multa de cancelamento?',

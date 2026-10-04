@@ -1,6 +1,6 @@
-# 🚀 Manual Completo de Prospecção, Vendas e Gestão Comercial (AgendaFlex v1.0)
+# 🚀 Manual Completo de Prospecção, Vendas e Gestão Comercial (Marcô v1.0)
 
-Este manual é o seu guia passo a passo para transformar o **AgendaFlex** em uma máquina de receita recorrente mensal (MRR). Aqui você encontrará modelos de abordagem, precificação, quebra de objeções, roteiro de demonstração e o mecanismo do teste grátis de 14 dias.
+Este manual é o seu guia passo a passo para transformar o **Marcô** em uma máquina de receita recorrente mensal (MRR). Aqui você encontrará modelos de abordagem, precificação, quebra de objeções, roteiro de demonstração e o mecanismo do teste grátis de 14 dias.
 
 ---
 
@@ -22,7 +22,7 @@ Este manual é o seu guia passo a passo para transformar o **AgendaFlex** em uma
 
 O grande erro de sistemas tradicionais de agendamento é que eles obrigam o cliente a baixar um aplicativo pesado (de 50 MB) ou criar conta com e-mail e senha antes de conseguir marcar um corte. O cliente desiste e manda mensagem no WhatsApp.
 
-### O diferencial matador do AgendaFlex:
+### O diferencial matador do Marcô:
 * **Zero Fricção:** O cliente abre o link direto na Bio do Instagram ou WhatsApp.
 * **3 Cliques:** Escolhe o serviço, escolhe o profissional/horário e confirma.
 * **Confirmação no WhatsApp:** Sem custos com gateways de SMS; o próprio cliente dispara a confirmação formatada para o WhatsApp do lojista.
@@ -55,7 +55,7 @@ Para quem está começando a prospectar, a simplicidade de planos fecha mais ven
 - Para profissionais autônomos que atendem sozinhos.
 - 1 Profissional ativo.
 - Serviços ilimitados e agendamentos ilimitados.
-- Link personalizado para Bio (`agendaflex.com/nome-do-profissional`).
+- Link personalizado para Bio (`marco.app/nome-do-profissional`).
 
 #### 🔹 Plano Equipe (Barbearias e Salões)
 - **R$ 79,90 / mês** (ou **R$ 779,00 / ano** à vista)
@@ -77,7 +77,7 @@ Nunca chegue tentando vender uma assinatura imediata. Use a técnica do **"Onboa
    - Baixe a foto do perfil e veja 3 serviços que eles oferecem.
 2. **Setup Rápido:**
    - No seu painel administrativo, configure a empresa com o nome dela, foto e os 3 serviços.
-   - O link dela já nasce pronto (ex: `agendaflex.com/barbearia-do-carlos`).
+   - O link dela já nasce pronto (ex: `marco.app/barbearia-do-carlos`).
 3. **Apresentação de Impacto:**
    - Você entrega o link já funcionando com a cara da loja dele.
    - Oferece **14 dias de degustação total sem cartão e sem compromisso**.
@@ -121,7 +121,7 @@ Na tabela `organizations`:
 > *Eu desenvolvi um sistema de agendamento online rápido (sem precisar baixar aplicativo) feito sob medida para o seu público marcar pela Bio do seu Instagram em 30 segundos.*
 > 
 > *Inclusive, **já montei uma prévia com o logo e serviços da sua barbearia** para você ver como fica lindo no celular:*
-> 👉 *[Link: agendaflex.com/sua-barbearia]*
+> 👉 *[Link: marco.app/sua-barbearia]*
 > 
 > *Gostaria de liberar 14 dias grátis para você testar na prática essa semana com seus clientes, sem compromisso nenhum. Posso te mandar o acesso?"*
 
@@ -160,7 +160,7 @@ Na tabela `organizations`:
 > **Resposta:** *"O caderninho funciona enquanto você está na barbearia. Mas e quando são 22h, você está jantando com sua família e um cliente quer marcar para o dia seguinte? Ou no domingo? Com o link na bio, você acorda com a agenda cheia sem precisar trabalhar no seu descanso."*
 
 ### Objeção 2: *"Meus clientes são mais velhos, não sabem usar aplicativo."*
-> **Resposta:** *"Exatamente por isso que o AgendaFlex não é um aplicativo de baixar. É apenas um link. Se o seu cliente sabe abrir um link no WhatsApp, ele sabe agendar aqui. Leva menos de 30 segundos e não pede cadastro com senha."*
+> **Resposta:** *"Exatamente por isso que o Marcô não é um aplicativo de baixar. É apenas um link. Se o seu cliente sabe abrir um link no WhatsApp, ele sabe agendar aqui. Leva menos de 30 segundos e não pede cadastro com senha."*
 
 ### Objeção 3: *"Não tenho tempo para cadastrar e configurar isso."*
 > **Resposta:** *"Não se preocupe, eu faço todo o cadastro inicial para você agora em 5 minutos. Você só precisa colocar o link na bio do seu Instagram."*
@@ -169,7 +169,7 @@ Na tabela `organizations`:
 > **Resposta:** *"Quanto você cobra no corte? R$ 40? Então com apenas UM cliente que deixaria de ir embora pela demora em responder no WhatsApp, o sistema já pagou a mensalidade inteira do mês. Todo o resto é lucro e economia de tempo para você."*
 
 ### Objeção 5: *"Já testei outros sistemas e achei muito complicado."*
-> **Resposta:** *"Os outros sistemas tentam fazer de tudo: controle financeiro complexo, emissão de nota, estoque... O AgendaFlex foi feito com um único objetivo: **fazer seu cliente agendar no menor tempo possível sem te atrapalhar**."*
+> **Resposta:** *"Os outros sistemas tentam fazer de tudo: controle financeiro complexo, emissão de nota, estoque... O Marcô foi feito com um único objetivo: **fazer seu cliente agendar no menor tempo possível sem te atrapalhar**."*
 
 ---
 

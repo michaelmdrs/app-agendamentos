@@ -1,6 +1,6 @@
 export const initialData = {
   admin: {
-    email: 'admin@agendaflex.com',
+    email: 'admin@marco.app',
     password: 'admin123'
   },
   organization: {

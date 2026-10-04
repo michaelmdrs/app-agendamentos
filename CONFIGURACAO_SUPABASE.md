@@ -1,6 +1,6 @@
 # 🗄️ Guia Passo a Passo: Configuração do Supabase + PostgreSQL
 
-Este documento orienta detalhadamente como configurar seu banco de dados **PostgreSQL** gratuito no **Supabase**, criar as tabelas e conectar de forma definitiva ao seu aplicativo **AgendaFlex**.
+Este documento orienta detalhadamente como configurar seu banco de dados **PostgreSQL** gratuito no **Supabase**, criar as tabelas e conectar de forma definitiva ao seu aplicativo **Marcô**.
 
 ---
 
@@ -210,10 +210,46 @@ VITE_SUPABASE_ANON_KEY=sua-chave-anon-aqui
 
 ---
 
-## ☁️ Passo 7: Variáveis no Deploy na Vercel (Produção)
+## ☁️ Passo 7: Como Conectar o Supabase na Vercel (Produção sem Mock)
 
-Ao conectar seu GitHub na **Vercel**:
-1. Em **Settings > Environment Variables**, adicione as duas variáveis:
-   - `VITE_SUPABASE_URL`: sua URL do Supabase.
-   - `VITE_SUPABASE_ANON_KEY`: sua chave pública do Supabase.
-2. O sistema em produção já estará 100% conectado ao banco PostgreSQL da nuvem.
+### ❓ Por que o meu teste na Vercel estava usando Mock?
+O arquivo `.env` está no `.gitignore` por segurança (para que suas chaves secretas não fiquem expostas publicamente no GitHub).
+Quando a Vercel faz o download do código do GitHub e roda o comando `npm run build`, o arquivo `.env` **não existe lá por padrão**.
+Como o sistema foi desenhado para ser resiliente e nunca quebrar na frente do cliente, se ele não encontra as variáveis da nuvem, ele ativa automaticamente o modo de contingência **"Mock Local"**.
+
+---
+
+### 🛠️ Passo a Passo para Ativar o PostgreSQL Real na Vercel:
+
+1. Acesse seu painel na Vercel: [https://vercel.com/dashboard](https://vercel.com/dashboard).
+2. Clique no seu projeto (**app-agendamentos** ou o nome que você deu).
+3. No menu superior, clique em ⚙️ **Settings** e depois em **Environment Variables** (no menu lateral esquerdo).
+4. Adicione as 2 variáveis exatamente com esses nomes:
+
+   | Key (Nome da Variável) | Value (Valor) | Ambientes Marcados |
+   | :--- | :--- | :--- |
+   | `VITE_SUPABASE_URL` | `https://qgnxyeanscyhdwwiupzi.supabase.co` | Production, Preview, Development |
+   | `VITE_SUPABASE_ANON_KEY` | *(Sua chave anon copiada do arquivo .env ou do Supabase)* | Production, Preview, Development |
+
+5. Clique em **Save**.
+
+---
+
+### ⚠️ ETAPA OBRIGATÓRIA: Fazer o Redeploy!
+Como o **Vite** é um compilador de frontend estático, as variáveis `VITE_*` são gravadas nos arquivos JavaScript no momento em que o build acontece. 
+Portanto, salvar as variáveis só surtirá efeito quando você rodar um novo build:
+
+1. Na Vercel, clique na aba **Deployments** (no topo).
+2. No primeiro deploy da lista (o mais recente), clique no botão de **três pontinhos (`...`)** do lado direito.
+3. Clique em **Redeploy**.
+4. Desmarque ou marque a caixa se perguntar e confirme em **Redeploy**.
+5. Aguarde cerca de 45 segundos até o status ficar verde (**Ready**).
+
+---
+
+### ✅ Como Confirmar que Deu Certo:
+Acesse o seu link da Vercel no caminho do administrador:
+`https://seu-projeto.vercel.app/admin`
+
+- No topo da página, ao lado do título, o badge exibirá **"PostgreSQL Conectado"** (badge verde) em vez de "Mock Local".
+- Qualquer agendamento, novo serviço ou novo barbeiro cadastrado agora será salvo permanentemente no seu banco PostgreSQL do Supabase!

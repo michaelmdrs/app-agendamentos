@@ -1,6 +1,6 @@
-# 📅 AgendaFlex
+# 📅 Marcô — Agendamento Inteligente
 
-> MVP de plataforma de agendamentos para negócios que precisam organizar serviços, profissionais e horários de forma simples e moderna.
+> Plataforma moderna de agendamentos online para barbearias, salões de beleza, clínicas e prestadores de serviços.
 
 O projeto foi pensado para atender barbearias, clínicas, estúdios, pet shops e prestadores de serviços que desejam oferecer uma experiência de agendamento rápida no celular e também um painel administrativo para acompanhar os atendimentos do dia.
 
