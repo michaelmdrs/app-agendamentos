@@ -39,6 +39,42 @@
         </div>
       </div>
 
+      <!-- Banner de Diagnóstico do Mock vs Supabase -->
+      <div v-if="isMock" class="bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs space-y-2 text-amber-950 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 font-black text-sm text-amber-900">
+            <span>⚠️</span>
+            <span>Painel Rodando no Modo Contingência (Mock Local)</span>
+          </div>
+          <span class="text-[10px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">
+            Offline / Mock
+          </span>
+        </div>
+        
+        <p class="text-amber-800 leading-relaxed font-medium">
+          {{ connectionResult?.reason || 'Identificando configuração de banco de dados...' }}
+        </p>
+
+        <div class="bg-white/90 backdrop-blur rounded-xl p-3 border border-amber-200 text-[11px] font-mono space-y-1">
+          <div class="flex justify-between items-center">
+            <span>• VITE_SUPABASE_URL:</span>
+            <span :class="diag.hasUrl ? 'text-green-700 font-bold' : 'text-red-600 font-bold'">
+              {{ diag.hasUrl ? '✅ ' + diag.urlPreview : '❌ Não detectada no build' }}
+            </span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>• VITE_SUPABASE_ANON_KEY:</span>
+            <span :class="diag.hasKey ? 'text-green-700 font-bold' : 'text-red-600 font-bold'">
+              {{ diag.hasKey ? '✅ ' + diag.keyLength + ' caracteres' : '❌ Não detectada no build' }}
+            </span>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-amber-700">
+          💡 <strong>Importante na Vercel:</strong> Após salvar as variáveis em <em>Settings &gt; Environment Variables</em>, você precisa ir na aba <strong>Deployments &gt; ... &gt; Redeploy</strong> para que o Vite compile as chaves no site.
+        </p>
+      </div>
+
       <!-- Card de Compartilhamento do Link do Negócio -->
       <div class="bg-gradient-to-r from-brand-600 to-brand-700 rounded-xl p-5 text-white shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -207,6 +243,8 @@ const resources = ref([])
 const currentOrg = ref(null)
 const subscriptionInfo = ref({ isTrial: true, expired: false, daysRemaining: 14 })
 const isMock = ref(dataService.isUsingMock())
+const diag = ref(dataService.getDiagnostics())
+const connectionResult = ref(null)
 const copied = ref(false)
 
 const publicBookingPath = computed(() => {
@@ -239,8 +277,14 @@ const loadData = async () => {
   resources.value = await dataService.getProfessionals(org?.id)
 }
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
+  connectionResult.value = await dataService.checkConnection()
+  if (connectionResult.value?.connected) {
+    isMock.value = false
+  } else {
+    isMock.value = true
+  }
 })
 
 const filteredAppointments = computed(() => {

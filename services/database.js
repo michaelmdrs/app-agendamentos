@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from '../src/supabase'
+import { supabase, isSupabaseConfigured, supabaseDiagnostics } from '../src/supabase'
 import { db as mockDb } from './mockStorage'
 
 /**
@@ -9,6 +9,41 @@ import { db as mockDb } from './mockStorage'
 export const dataService = {
   isUsingMock() {
     return !isSupabaseConfigured
+  },
+
+  getDiagnostics() {
+    return supabaseDiagnostics
+  },
+
+  async checkConnection() {
+    if (!isSupabaseConfigured) {
+      const missing = []
+      if (!supabaseDiagnostics.hasUrl) missing.push('VITE_SUPABASE_URL')
+      if (!supabaseDiagnostics.hasKey) missing.push('VITE_SUPABASE_ANON_KEY')
+      return {
+        connected: false,
+        reason: `Variável(is) ausente(s) no build: ${missing.join(', ')}. Configure no painel da Vercel e faça o Redeploy.`
+      }
+    }
+
+    try {
+      const { data, error } = await supabase.from('organizations').select('id, name, slug').limit(1)
+      if (error) {
+        return {
+          connected: false,
+          reason: `Erro retornado pelo Supabase: ${error.message}`
+        }
+      }
+      return {
+        connected: true,
+        data: data?.[0] || null
+      }
+    } catch (err) {
+      return {
+        connected: false,
+        reason: `Falha na conexão: ${err.message}`
+      }
+    }
   },
 
   // Controle do período de teste de 14 dias e assinatura
