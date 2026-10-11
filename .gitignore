@@ -5,3 +5,6 @@ dist
 .env
 .env.*
 !.env.example
+.CONFIGURACAO_SUPABASE.md
+.GUIA_PRODUCAO_E_PROSPECCAO.md
+.MANUAL_PROSPECCAO_E_VENDAS.md
