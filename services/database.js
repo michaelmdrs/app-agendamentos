@@ -351,25 +351,52 @@ export const dataService = {
     }
   },
 
-  // Horários já reservados (para evitar overbooking)
+  // Horários já reservados (para evitar overbooking considerando intervalos de 30min e duração do serviço)
   async getBookedTimes(professionalId, date) {
+    const expandSlots = (startTime, durationMinutes = 30) => {
+      if (!startTime) return []
+      const [h, m] = startTime.slice(0, 5).split(':').map(Number)
+      const startTotal = h * 60 + m
+      const slots = []
+      const steps = Math.max(1, Math.ceil((Number(durationMinutes) || 30) / 30))
+      for (let i = 0; i < steps; i++) {
+        const total = startTotal + i * 30
+        const nh = String(Math.floor(total / 60)).padStart(2, '0')
+        const nm = String(total % 60).padStart(2, '0')
+        slots.push(`${nh}:${nm}`)
+      }
+      return slots
+    }
+
     if (!isSupabaseConfigured) {
       const list = mockDb.getAppointments()
-      return list
+      const services = mockDb.getServices()
+      const occupied = new Set()
+      list
         .filter(a => (a.resource_id === professionalId || a.professional_id === professionalId) && a.date === date && a.status !== 'cancelled')
-        .map(a => a.time)
+        .forEach(a => {
+          const srv = services.find(s => s.id === a.service_id)
+          const duration = srv?.duration_minutes || 30
+          expandSlots(a.time, duration).forEach(slot => occupied.add(slot))
+        })
+      return Array.from(occupied)
     }
 
     try {
       const { data, error } = await supabase
         .from('appointments')
-        .select('start_time')
+        .select('start_time, service_id, services(duration_minutes)')
         .eq('professional_id', professionalId)
         .eq('booking_date', date)
         .neq('status', 'cancelled')
 
       if (error) throw error
-      return (data || []).map(a => a.start_time?.slice(0, 5))
+      const occupied = new Set()
+      ;(data || []).forEach(a => {
+        const duration = a.services?.duration_minutes || 30
+        expandSlots(a.start_time, duration).forEach(slot => occupied.add(slot))
+      })
+      return Array.from(occupied)
     } catch (err) {
       console.warn('Erro ao consultar horários ocupados no Supabase:', err)
       return []

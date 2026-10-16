@@ -608,16 +608,46 @@ const today = computed(() => {
   return `${year}-${month}-${day}`
 })
 
-const baseTimes = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00']
+const baseTimes = [
+  '07:00', '07:30',
+  '08:00', '08:30',
+  '09:00', '09:30',
+  '10:00', '10:30',
+  '11:00', '11:30',
+  '13:00', '13:30',
+  '14:00', '14:30',
+  '15:00', '15:30',
+  '16:00', '16:30',
+  '17:00', '17:30',
+  '18:00', '18:30',
+  '19:00', '19:30'
+]
 
-// Computa horários livres checando ocupação
+const addMinutesToTime = (timeStr, minutesToAdd) => {
+  const [h, m] = timeStr.split(':').map(Number)
+  const total = h * 60 + m + minutesToAdd
+  const nh = String(Math.floor(total / 60)).padStart(2, '0')
+  const nm = String(total % 60).padStart(2, '0')
+  return `${nh}:${nm}`
+}
+
+// Computa horários livres checando ocupação e duração do serviço selecionado (30min ou 60min)
 const computedTimeSlots = computed(() => {
   const now = new Date()
   const currentHours = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0')
   const isToday = selectedDate.value === today.value
+  const duration = Number(selectedService.value?.duration_minutes) || 30
+  const requiredSteps = Math.max(1, Math.ceil(duration / 30))
 
   return baseTimes.map(time => {
-    const isBooked = bookedTimes.value.includes(time)
+    let isBooked = false
+    for (let i = 0; i < requiredSteps; i++) {
+      const checkSlot = addMinutesToTime(time, i * 30)
+      if (bookedTimes.value.includes(checkSlot)) {
+        isBooked = true
+        break
+      }
+    }
     const isPast = isToday && time <= currentHours
     return { time, isBooked, isPast }
   })
@@ -635,6 +665,7 @@ const filteredProfessionals = computed(() => {
 
 const selectService = (service) => {
   selectedService.value = service
+  selectedTime.value = ''
   // Se o profissional selecionado antes não faz esse serviço, reseta
   if (selectedResource.value && !filteredProfessionals.value.some(p => p.id === selectedResource.value.id)) {
     selectedResource.value = null
