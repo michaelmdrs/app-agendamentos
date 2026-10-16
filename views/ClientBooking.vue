@@ -267,7 +267,7 @@
               <span class="text-brand-600">📅</span>
               <span>Escolha o Dia</span>
             </h2>
-            <span class="text-xs text-brand-600 font-bold">Próximos 7 dias</span>
+            <span class="text-xs text-brand-600 font-bold">Seg a Sáb (Exceto feriados)</span>
           </div>
 
           <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
@@ -275,7 +275,7 @@
               v-for="d in availableDays"
               :key="d.dateStr"
               type="button"
-              @click="selectedDate = d.dateStr"
+              @click="selectedDate = d.dateStr; selectedTime = ''"
               :class="[
                 'shrink-0 flex flex-col items-center justify-center w-16 py-3 rounded-2xl border-2 transition-all font-sans',
                 selectedDate === d.dateStr
@@ -543,6 +543,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { dataService } from '../services/database'
+import { isAvailableBookingDay } from '../src/utils/holidays'
 
 const route = useRoute()
 const currentSlug = computed(() => route.params.slug || 'barbeariagriffs')
@@ -569,31 +570,43 @@ const selectedTime = ref('')
 const clientName = ref('')
 const clientPhone = ref('')
 
-// Gera próximos 7 dias para o carrossel interativo
+// Gera próximos 7 dias úteis disponíveis (Segunda a Sábado, desconsiderando domingos e feriados do calendário)
 const availableDays = computed(() => {
   const days = []
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
   const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
   
-  for (let i = 0; i < 7; i++) {
+  let offset = 0
+  while (days.length < 7 && offset < 30) {
     const d = new Date()
-    d.setDate(d.getDate() + i)
-    const year = d.getFullYear()
-    const month = String(d.getMonth() + 1).padStart(2, '0')
-    const day = String(d.getDate()).padStart(2, '0')
-    const dateStr = `${year}-${month}-${day}`
-    
-    days.push({
-      dateStr,
-      dayNumber: d.getDate(),
-      dayName: i === 0 ? 'Hoje' : i === 1 ? 'Amanhã' : weekDays[d.getDay()],
-      monthName: months[d.getMonth()]
-    })
+    d.setDate(d.getDate() + offset)
+
+    if (isAvailableBookingDay(d)) {
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}`
+      
+      days.push({
+        dateStr,
+        dayNumber: d.getDate(),
+        dayName: offset === 0 ? 'Hoje' : offset === 1 ? 'Amanhã' : weekDays[d.getDay()],
+        monthName: months[d.getMonth()]
+      })
+    }
+
+    offset++
   }
   return days
 })
 
-const today = computed(() => availableDays.value[0]?.dateStr || '')
+const today = computed(() => {
+  const d = new Date()
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+})
 
 const baseTimes = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00']
 
